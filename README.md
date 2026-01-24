@@ -12,7 +12,7 @@
 ## 📦 项目结构
 
 ```
-react-demo/
+esume-forge/
 ├── src/
 │   ├── components/          # React 组件
 │   │   ├── Counter.tsx      # 计数器组件示例
@@ -36,11 +36,13 @@ react-demo/
 ## 🎯 功能特性
 
 ### 1. 计数器示例 (Counter)
+
 - 展示基本的 Zustand store 使用
 - 包含增加、减少、重置等操作
 - 演示状态的全局共享
 
 ### 2. 用户列表示例 (UserList)
+
 - 展示异步操作处理
 - 使用 Zustand 中间件:
   - `devtools` - Redux DevTools 支持
@@ -48,6 +50,7 @@ react-demo/
 - 包含加载状态、错误处理
 
 ### 3. 现代化 UI 设计
+
 - 渐变色背景和按钮
 - 流畅的动画效果
 - 响应式布局
@@ -107,10 +110,10 @@ import { useStore } from './store';
 function Component() {
   // 订阅整个 store
   const { count, increment } = useStore();
-  
+
   // 或者只订阅特定状态 (性能优化)
   const count = useStore((state) => state.count);
-  
+
   return <button onClick={increment}>{count}</button>;
 }
 ```

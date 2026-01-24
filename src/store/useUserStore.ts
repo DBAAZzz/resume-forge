@@ -37,9 +37,9 @@ export const useUserStore = create<UserState>()(
             ];
             set({ users: mockUsers, loading: false });
           } catch (error) {
-            set({ 
-              error: error instanceof Error ? error.message : 'Unknown error', 
-              loading: false 
+            set({
+              error: error instanceof Error ? error.message : 'Unknown error',
+              loading: false,
             });
           }
         },
