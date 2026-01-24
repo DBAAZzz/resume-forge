@@ -1,12 +1,13 @@
 import { Outlet } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useCurrentUser } from '@/queries/useUserQueries';
 import {
   slideDownVariants,
   fadeInVariants,
   itemVariants,
   containerVariants,
-} from '../utils/animations';
+} from '@/utils/animations';
 
 const navItems = [
   { path: '/', label: 'Home' },
@@ -17,6 +18,8 @@ const navItems = [
 ];
 
 export default function MainLayout() {
+  const { data: currentUser, isLoading } = useCurrentUser();
+
   return (
     <div className="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white">
       <motion.nav
@@ -36,6 +39,7 @@ export default function MainLayout() {
             RESUME<span className="text-gray-400">FORGE</span>
           </motion.div>
 
+          {/* Center Navigation */}
           <motion.div
             variants={containerVariants}
             initial="initial"
@@ -61,6 +65,31 @@ export default function MainLayout() {
                 </motion.span>
               </NavLink>
             ))}
+          </motion.div>
+
+          {/* Right Side User Profile */}
+          <motion.div
+            variants={fadeInVariants}
+            initial="initial"
+            animate="animate"
+            transition={{ delay: 0.5 }}
+            className="flex items-center space-x-4"
+          >
+            {isLoading ? (
+              <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
+            ) : currentUser ? (
+              <div className="flex items-center space-x-3">
+                <div className="text-right hidden sm:block">
+                  <p className="text-sm font-bold">{currentUser.name}</p>
+                  <p className="text-xs text-gray-500">{currentUser.title}</p>
+                </div>
+                <img
+                  src={currentUser.avatar}
+                  alt={currentUser.name}
+                  className="w-8 h-8 rounded-full border border-gray-200"
+                />
+              </div>
+            ) : null}
           </motion.div>
         </div>
       </motion.nav>

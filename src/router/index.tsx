@@ -1,14 +1,15 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import MainLayout from '../layouts/MainLayout';
-import AnimatedLoader from '../components/AnimatedLoader';
+import MainLayout from '@/layouts/MainLayout';
+import AnimatedLoader from '@/components/AnimatedLoader';
 
 // 懒加载页面组件
-const Home = lazy(() => import('../pages/Home'));
-const Resume = lazy(() => import('../pages/Resume'));
-const Analysis = lazy(() => import('../pages/Analysis'));
-const Discover = lazy(() => import('../pages/Discover'));
-const AnimationDemo = lazy(() => import('../pages/AnimationDemo'));
+const Home = lazy(() => import('@/pages/Home'));
+const Resume = lazy(() => import('@/pages/Resume'));
+const Analysis = lazy(() => import('@/pages/Analysis'));
+const Discover = lazy(() => import('@/pages/Discover'));
+const AnimationDemo = lazy(() => import('@/pages/AnimationDemo'));
+const DesignSystem = lazy(() => import('@/pages/DesignSystem'));
 
 // Suspense 包装器
 const withSuspense = (Component: React.ComponentType) => (
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: 'demo',
         element: withSuspense(AnimationDemo),
+      },
+      {
+        path: 'design-system',
+        element: withSuspense(DesignSystem),
       },
     ],
   },

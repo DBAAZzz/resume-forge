@@ -1,5 +1,5 @@
 import { motion, type HTMLMotionProps } from 'framer-motion';
-import { scaleVariants } from '../utils/animations';
+import { scaleVariants } from '@/utils/animations';
 
 interface AnimatedCardProps extends HTMLMotionProps<'div'> {
   delay?: number;

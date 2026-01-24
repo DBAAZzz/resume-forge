@@ -1,17 +1,31 @@
 import { motion } from 'framer-motion';
-import AnimatedPage from '../components/AnimatedPage';
-import { containerVariants, itemVariants, listItemHover, linkTextHover } from '../utils/animations';
+import AnimatedPage from '@/components/AnimatedPage';
+import { containerVariants, itemVariants, listItemHover, linkTextHover } from '@/utils/animations';
+import { Typography } from '@/components/base/Typography';
+
+const MotionTypography = motion(Typography);
 
 export default function Discover() {
   return (
     <AnimatedPage className="page-container">
-      <motion.div variants={containerVariants} initial="initial" animate="animate">
-        <motion.h1 variants={itemVariants} className="text-display">
-          DISCOVER
-        </motion.h1>
-        <motion.p variants={itemVariants} className="text-body mt-4 mb-8">
-          Explore potential career paths and emerging technologies.
-        </motion.p>
+      <motion.div
+        variants={containerVariants}
+        initial="initial"
+        animate="animate"
+        className="space-y-8"
+      >
+        <div className="space-y-2">
+          <MotionTypography variant="h1" variants={itemVariants} className="text-display">
+            DISCOVER
+          </MotionTypography>
+          <MotionTypography
+            variant="lead"
+            variants={itemVariants}
+            className="text-muted-foreground/80"
+          >
+            Explore potential career paths and emerging technologies.
+          </MotionTypography>
+        </div>
 
         <motion.div variants={containerVariants} className="space-y-4">
           {[1, 2, 3].map((i) => (
@@ -20,11 +34,13 @@ export default function Discover() {
               variants={itemVariants}
               whileHover={listItemHover}
               whileTap={{ scale: 0.98 }}
-              className="flex items-center justify-between p-4 border-b border-gray-200 transition-colors cursor-pointer group"
+              className="flex items-center justify-between p-6 border-b border-border transition-colors cursor-pointer group hover:bg-secondary/20 rounded-md"
             >
-              <span className="font-bold text-lg">Opportunity {i}</span>
+              <Typography variant="h4" className="font-medium">
+                Opportunity {i}
+              </Typography>
               <motion.span
-                className="mono text-xs text-gray-400 group-hover:text-black transition-colors"
+                className="mono text-xs text-muted-foreground group-hover:text-primary transition-colors"
                 whileHover={linkTextHover}
               >
                 READ MORE -&gt;

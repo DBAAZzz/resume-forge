@@ -1,22 +1,23 @@
 import { motion, type HTMLMotionProps } from 'framer-motion';
-import { buttonHover, buttonTap } from '../utils/animations';
+import { buttonHover, buttonTap } from '@/utils/animations';
 
 interface AnimatedButtonProps extends HTMLMotionProps<'button'> {
   variant?: 'primary' | 'secondary' | 'outline';
+  primary?: boolean;
 }
 
-/**
- * 带有动画效果的按钮组件
- * 支持多种样式变体和自定义属性
- */
 export default function AnimatedButton({
   children,
   variant = 'primary',
+  primary,
   className = '',
   ...props
 }: AnimatedButtonProps) {
+  // If primary prop is true, force variant to 'primary'
+  const finalVariant = primary ? 'primary' : variant;
+
   const baseStyles =
-    'px-6 py-3 font-medium tracking-wide transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
+    'px-6 py-3 font-medium tracking-wide transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-full font-bold';
 
   const variantStyles = {
     primary: 'bg-black text-white hover:bg-gray-800 focus:ring-black',
@@ -28,7 +29,7 @@ export default function AnimatedButton({
     <motion.button
       whileHover={buttonHover}
       whileTap={buttonTap}
-      className={`${baseStyles} ${variantStyles[variant]} ${className}`}
+      className={`${baseStyles} ${variantStyles[finalVariant]} ${className}`}
       {...props}
     >
       {children}

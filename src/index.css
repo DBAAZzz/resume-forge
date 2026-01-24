@@ -1,39 +1,118 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@layer base {
+  :root {
+    /* Light Mode - "Silent Luxury" (Warm Stone/Off-White) */
+    --background: 40 20% 99%; /* Very warm off-white */
+    --foreground: 24 10% 10%; /* Dark Charcoal */
 
-  color-scheme: light;
-  color: #000000;
-  background-color: #ffffff;
+    --card: 0 0% 100%;
+    --card-foreground: 24 10% 10%;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    --popover: 0 0% 100%;
+    --popover-foreground: 24 10% 10%;
+
+    --primary: 24 10% 10%; /* Matte Black/Charcoal */
+    --primary-foreground: 60 5% 96%;
+
+    --secondary: 60 5% 96%; /* Very light gray/stone */
+    --secondary-foreground: 24 10% 10%;
+
+    --muted: 60 5% 96%;
+    --muted-foreground: 25 5% 45%;
+
+    --accent: 60 5% 96%;
+    --accent-foreground: 24 10% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 60 5% 96%;
+
+    --border: 20 6% 90%;
+    --input: 20 6% 90%;
+    --ring: 24 10% 10%;
+
+    --radius: 0.5rem; /* Slightly tighter radius for sophisticated feel */
+  }
+
+  .dark {
+    /* Dark Mode - "Matte Obsidian" */
+    --background: 24 10% 5%; /* Deep warm black */
+    --foreground: 60 5% 90%; /* Soft white */
+
+    --card: 24 10% 7%;
+    --card-foreground: 60 5% 90%;
+
+    --popover: 24 10% 7%;
+    --popover-foreground: 60 5% 90%;
+
+    --primary: 60 5% 90%; /* Soft White */
+    --primary-foreground: 24 10% 7%;
+
+    --secondary: 24 5% 18%; /* Dark gray */
+    --secondary-foreground: 60 5% 90%;
+
+    --muted: 24 5% 18%;
+    --muted-foreground: 24 5% 60%;
+
+    --accent: 24 5% 18%;
+    --accent-foreground: 60 5% 90%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 60 5% 90%;
+
+    --border: 24 5% 18%;
+    --input: 24 5% 18%;
+    --ring: 60 5% 90%;
+  }
 }
 
-/* Typography Utilities */
-.text-display {
-  @apply text-6xl font-black tracking-tighter uppercase leading-none;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.02em; /* Tighter tracking for elegance */
+  }
+
+  code,
+  pre,
+  .mono {
+    font-family: 'Space Grotesk', monospace;
+  }
 }
 
-.text-body {
-  @apply text-lg leading-relaxed text-gray-700;
-}
+@layer utilities {
+  .glass {
+    @apply bg-background/80 backdrop-blur-md border border-foreground/5 shadow-sm;
+  }
 
-.mono {
-  font-family: 'Courier New', Courier, monospace;
-}
+  .glass-card {
+    @apply bg-card/50 backdrop-blur-sm border border-border shadow-sm;
+  }
 
-.page-container {
-  @apply animate-fade-in;
+  .text-gradient {
+    /* Subtle gradient for luxury feel, not neon */
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-foreground to-muted-foreground;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
 }
 
 @keyframes fadeIn {
@@ -45,57 +124,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-}
-
-/* 选中文本样式 */
-::selection {
-  background: rgba(102, 126, 234, 0.3);
-  color: inherit;
-}
-
-/* 通用按钮样式 */
-.btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-}
-
-.btn:active {
-  transform: translateY(0);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.btn-danger {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-}
-
-.btn-success {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-}
-
-.btn-secondary {
-  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-  color: #333;
 }

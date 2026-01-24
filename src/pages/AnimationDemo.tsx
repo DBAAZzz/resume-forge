@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { AnimatedPage, AnimatedButton, AnimatedCard, AnimatedLoader } from '../components';
-import { containerVariants, itemVariants, pulseVariants } from '../utils/animations';
+import { AnimatedPage, AnimatedButton, AnimatedCard, AnimatedLoader } from '@/components';
+import { containerVariants, itemVariants, pulseVariants } from '@/utils/animations';
 import { useState } from 'react';
 
 export default function AnimationDemo() {

@@ -1,162 +1,69 @@
-# Vite + React + TypeScript + Zustand 项目
+# Vite + React + TypeScript + Zustand + Tailwind CSS
 
-这是一个使用现代化技术栈搭建的 React 应用模板,集成了 Zustand 状态管理库。
+这是一个使用现代化技术栈搭建的 React 应用模板，集成了 Zustand 状态管理库和 Tailwind CSS，并采用 "Silent Luxury" (朴素高级) 设计语言。
 
 ## 🚀 技术栈
 
 - **Vite** - 下一代前端构建工具
 - **React 18** - 用于构建用户界面的 JavaScript 库
-- **TypeScript** - JavaScript 的超集,提供类型安全
-- **Zustand** - 轻量级的 React 状态管理库
+- **TypeScript** - 强类型支持
+- **Zustand** - 轻量级状态管理
+- **Tailwind CSS** - 原子化 CSS 框架
+- **Framer Motion** - 强大的动画库
+- **React Query** - 服务端状态管理
+- **MSW** - API Mocking
 
 ## 📦 项目结构
 
 ```
-esume-forge/
-├── src/
-│   ├── components/          # React 组件
-│   │   ├── Counter.tsx      # 计数器组件示例
-│   │   ├── Counter.css
-│   │   ├── UserList.tsx     # 用户列表组件示例
-│   │   ├── UserList.css
-│   │   └── index.ts         # 组件导出
-│   ├── store/               # Zustand 状态管理
-│   │   ├── useCounterStore.ts  # 计数器 store
-│   │   ├── useUserStore.ts     # 用户 store (带中间件)
-│   │   └── index.ts            # store 导出
-│   ├── App.tsx              # 主应用组件
-│   ├── App.css
-│   ├── main.tsx             # 应用入口
-│   └── index.css            # 全局样式
-├── package.json
-├── tsconfig.json
-└── vite.config.ts
+src/
+├── api/             # API 定义与 Mock
+├── components/      # 组件库
+│   ├── base/        # 原子组件 (Button, Input, Typography...)
+│   └── ...          # 复合组件
+├── layout/          # 布局组件
+├── pages/           # 页面试图
+├── queries/         # React Query Hooks
+├── store/           # Zustand Stores
+├── utils/           # 工具函数 (Animations, Classnames...)
+└── router/          # 路由配置
 ```
 
-## 🎯 功能特性
+## � 设计系统: Silent Luxury
 
-### 1. 计数器示例 (Counter)
+本项目采用 Minimalist Luxury 设计理念：
 
-- 展示基本的 Zustand store 使用
-- 包含增加、减少、重置等操作
-- 演示状态的全局共享
+- **色彩**: 全中性色调 (Warm Stone / Matte Obsidian)，移除高饱和度装饰色。
+- **排版**: `Outfit` (标题) + `Inter` (正文) + `Space Grotesk` (代码/标签)。
+- **交互**: 极简、克制、微交互。
 
-### 2. 用户列表示例 (UserList)
+详细设计规范请参考: [Design System 设计规范](docs/Design%20System%20设计规范.md)
 
-- 展示异步操作处理
-- 使用 Zustand 中间件:
-  - `devtools` - Redux DevTools 支持
-  - `persist` - localStorage 持久化
-- 包含加载状态、错误处理
+## 📚 开发文档
 
-### 3. 现代化 UI 设计
+本项目包含详细的架构与最佳实践文档，请务必阅读：
 
-- 渐变色背景和按钮
-- 流畅的动画效果
-- 响应式布局
-- 玻璃态设计 (Glassmorphism)
+- **设计规范**: [Design System 设计规范](docs/Design%20System%20设计规范.md)
+- **状态管理**: [状态管理最佳实践指南](docs/状态管理最佳实践指南.md)
+- **动画指南**: [Framer Motion 使用指南](docs/Framer%20Motion%20使用指南.md)
+- **路由系统**: [路由系统设计](docs/%20路由系统设计.md)
+- **API Mock**: [前端 API Mocking 最佳实践指南](docs/前端%20API%20Mocking%20最佳实践指南.md)
 
-## 🛠️ 开发指南
-
-### 安装依赖
+## 🛠️ 常用命令
 
 ```bash
+# 安装依赖
 npm install
-```
 
-### 启动开发服务器
-
-```bash
+# 启动开发服务器
 npm run dev
-```
 
-访问 http://localhost:5173 查看应用
-
-### 构建生产版本
-
-```bash
+# 构建生产版本
 npm run build
-```
 
-### 预览生产构建
-
-```bash
+# 预览生产构建
 npm run preview
 ```
-
-## 📚 Zustand 使用说明
-
-### 创建 Store
-
-```typescript
-import { create } from 'zustand';
-
-interface State {
-  count: number;
-  increment: () => void;
-}
-
-export const useStore = create<State>((set) => ({
-  count: 0,
-  increment: () => set((state) => ({ count: state.count + 1 })),
-}));
-```
-
-### 在组件中使用
-
-```typescript
-import { useStore } from './store';
-
-function Component() {
-  // 订阅整个 store
-  const { count, increment } = useStore();
-
-  // 或者只订阅特定状态 (性能优化)
-  const count = useStore((state) => state.count);
-
-  return <button onClick={increment}>{count}</button>;
-}
-```
-
-### 使用中间件
-
-```typescript
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-
-export const useStore = create<State>()(
-  devtools(
-    persist(
-      (set) => ({
-        // your state
-      }),
-      {
-        name: 'storage-key', // localStorage key
-      }
-    )
-  )
-);
-```
-
-## 🎨 样式系统
-
-项目使用了现代化的 CSS 设计系统:
-
-- **CSS 变量** - 统一的颜色和主题管理
-- **渐变色** - 丰富的视觉效果
-- **动画** - 流畅的用户体验
-- **响应式** - 适配不同屏幕尺寸
-
-## 🔧 调试工具
-
-安装 [Redux DevTools](https://github.com/reduxjs/redux-devtools) 浏览器扩展来调试 Zustand store。
-
-## 📖 学习资源
-
-- [Vite 文档](https://vitejs.dev/)
-- [React 文档](https://react.dev/)
-- [TypeScript 文档](https://www.typescriptlang.org/)
-- [Zustand 文档](https://github.com/pmndrs/zustand)
 
 ## 📝 License
 
