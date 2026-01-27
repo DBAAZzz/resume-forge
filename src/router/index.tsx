@@ -7,7 +7,7 @@ import MainLayout from '@/layouts/MainLayout';
 // 懒加载页面组件
 const Home = lazy(() => import('@/pages/Home'));
 const Resume = lazy(() => import('@/pages/Resume'));
-const Analysis = lazy(() => import('@/pages/Analysis'));
+const Analysis = lazy(() => import('@/pages/analysis/Index'));
 const Discover = lazy(() => import('@/pages/Discover'));
 const AnimationDemo = lazy(() => import('@/pages/AnimationDemo'));
 const DesignSystem = lazy(() => import('@/pages/DesignSystem'));

@@ -26,11 +26,13 @@ export default function AnimatedButton({
     outline: 'border-2 border-black text-black hover:bg-black hover:text-white focus:ring-black',
   };
 
+  const { disabled } = props;
+
   return (
     <motion.button
-      whileHover={buttonHover}
-      whileTap={buttonTap}
-      className={`${baseStyles} ${variantStyles[finalVariant]} ${className}`}
+      whileHover={disabled ? undefined : buttonHover}
+      whileTap={disabled ? undefined : buttonTap}
+      className={`${baseStyles} ${variantStyles[finalVariant]} ${className} ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}
       {...props}
     >
       {children}

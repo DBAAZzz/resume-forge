@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Outlet } from 'react-router';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 import { useCurrentUser } from '@/queries/useUserQueries';
 import {
@@ -11,25 +11,26 @@ import {
 } from '@/utils/animations';
 
 const navItems = [
-  { path: '/', label: 'Home' },
-  { path: '/resume', label: 'My Resume' },
-  { path: '/analysis', label: 'Resume Analysis' },
-  { path: '/discover', label: 'Discover' },
-  { path: '/demo', label: 'Animations' },
+  { path: '/', label: '首页' },
+  { path: '/resume', label: '我的简历' },
+  { path: '/analysis', label: '简历分析' },
+  { path: '/discover', label: '发现' },
 ];
 
 export default function MainLayout() {
   const { data: currentUser, isLoading } = useCurrentUser();
+  const location = useLocation();
+  const isAnalysis = location.pathname.includes('/analysis');
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white">
+    <div className="h-screen w-full bg-white text-black font-sans selection:bg-black selection:text-white flex flex-col overflow-hidden">
       <motion.nav
         variants={slideDownVariants}
         initial="initial"
         animate="animate"
-        className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200"
+        className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200 h-16"
       >
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
           <motion.div
             variants={fadeInVariants}
             initial="initial"
@@ -95,9 +96,16 @@ export default function MainLayout() {
         </div>
       </motion.nav>
 
-      <main className="pt-24 max-w-7xl mx-auto px-6 pb-12">
-        <Outlet />
-      </main>
+      {/* Scrollable Content Area */}
+      <div
+        className={`flex-1 flex w-full pt-16 ${isAnalysis ? 'overflow-hidden flex flex-col' : 'overflow-y-auto'}`}
+      >
+        <main
+          className={`w-full flex-1 mx-auto ${isAnalysis ? 'h-full flex-1 flex flex-col' : 'max-w-7xl px-6 pb-12'}`}
+        >
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

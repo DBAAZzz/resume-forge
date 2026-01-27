@@ -1,6 +1,7 @@
-import type { FastifyInstance } from 'fastify';
 import { runAgent } from '../services/agent.service.js';
+
 import type { AgentRequest } from '../types/index.js';
+import type { FastifyInstance } from 'fastify';
 
 export async function agentRoutes(app: FastifyInstance) {
   app.post<{ Body: AgentRequest }>('/agent', async (request, reply) => {
