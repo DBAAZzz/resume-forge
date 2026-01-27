@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
+
 import AnimatedPage from '@/components/AnimatedPage';
-import { containerVariants, itemVariants } from '@/utils/animations';
 import { Typography } from '@/components/base/Typography';
+import { containerVariants, itemVariants } from '@/utils/animations';
 
 const MotionTypography = motion(Typography);
 
-export default function Analysis() {
+const Analysis = () => {
   return (
     <AnimatedPage className="page-container">
       <motion.div variants={containerVariants} initial="initial" animate="animate">
@@ -42,4 +43,6 @@ export default function Analysis() {
       </motion.div>
     </AnimatedPage>
   );
-}
+};
+
+export default Analysis;

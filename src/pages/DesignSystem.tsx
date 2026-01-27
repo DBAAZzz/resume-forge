@@ -1,9 +1,10 @@
 import { useState } from 'react';
+
 import { Button } from '@/components/base/Button';
 import { Input } from '@/components/base/Input';
 import { Typography } from '@/components/base/Typography';
 
-export default function DesignSystem() {
+const DesignSystem = () => {
   const [isDark, setIsDark] = useState(false); // Default to light for Luxury theme
 
   const toggleTheme = () => {
@@ -179,4 +180,6 @@ export default function DesignSystem() {
       </div>
     </div>
   );
-}
+};
+
+export default DesignSystem;

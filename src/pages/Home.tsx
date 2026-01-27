@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
+
 import AnimatedPage from '@/components/AnimatedPage';
-import { containerVariants, itemVariants } from '@/utils/animations';
 import { Typography } from '@/components/base/Typography';
+import { containerVariants, itemVariants } from '@/utils/animations';
 
 const MotionTypography = motion(Typography);
 
-export default function Home() {
+const Home = () => {
   return (
     <AnimatedPage className="page-container flex flex-col justify-center min-h-[60vh]">
       <motion.div
@@ -35,4 +36,6 @@ export default function Home() {
       </motion.div>
     </AnimatedPage>
   );
-}
+};
+
+export default Home;

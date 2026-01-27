@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import MainLayout from '@/layouts/MainLayout';
+
 import AnimatedLoader from '@/components/AnimatedLoader';
+import MainLayout from '@/layouts/MainLayout';
 
 // 懒加载页面组件
 const Home = lazy(() => import('@/pages/Home'));

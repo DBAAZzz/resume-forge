@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
+
 import AnimatedPage from '@/components/AnimatedPage';
-import { containerVariants, itemVariants, listItemHover, linkTextHover } from '@/utils/animations';
 import { Typography } from '@/components/base/Typography';
+import { containerVariants, itemVariants, listItemHover, linkTextHover } from '@/utils/animations';
 
 const MotionTypography = motion(Typography);
 
-export default function Discover() {
+const Discover = () => {
   return (
     <AnimatedPage className="page-container">
       <motion.div
@@ -51,4 +52,6 @@ export default function Discover() {
       </motion.div>
     </AnimatedPage>
   );
-}
+};
+
+export default Discover;

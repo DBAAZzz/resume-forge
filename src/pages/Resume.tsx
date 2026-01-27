@@ -1,16 +1,17 @@
 import { motion } from 'framer-motion';
+
+import AnimatedCard from '@/components/AnimatedCard';
+import AnimatedLoader from '@/components/AnimatedLoader';
+import AnimatedPage from '@/components/AnimatedPage';
+import { Button } from '@/components/base/Button';
+import { Typography } from '@/components/base/Typography';
 import { useResumes } from '@/queries/useResumeQueries';
 import { useResumeStore } from '@/store/useResumeStore';
 import { containerVariants, fadeInLeftVariants } from '@/utils/animations';
-import AnimatedCard from '@/components/AnimatedCard';
-import AnimatedPage from '@/components/AnimatedPage';
-import AnimatedLoader from '@/components/AnimatedLoader';
-import { Button } from '@/components/base/Button';
-import { Typography } from '@/components/base/Typography';
 
 const MotionTypography = motion(Typography);
 
-export default function Resume() {
+const Resume = () => {
   const { data: resumes = [], isLoading, error } = useResumes();
   const { viewMode, setViewMode } = useResumeStore();
 
@@ -148,4 +149,6 @@ export default function Resume() {
       </motion.div>
     </AnimatedPage>
   );
-}
+};
+
+export default Resume;

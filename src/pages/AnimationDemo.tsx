@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
-import { AnimatedPage, AnimatedButton, AnimatedCard, AnimatedLoader } from '@/components';
-import { containerVariants, itemVariants, pulseVariants } from '@/utils/animations';
 import { useState } from 'react';
 
-export default function AnimationDemo() {
+import { AnimatedPage, AnimatedButton, AnimatedCard, AnimatedLoader } from '@/components';
+import { containerVariants, itemVariants, pulseVariants } from '@/utils/animations';
+
+const AnimationDemo = () => {
   const [loading, setLoading] = useState(false);
 
   const toggleLoading = () => {
@@ -86,4 +87,6 @@ export default function AnimationDemo() {
       </motion.div>
     </AnimatedPage>
   );
-}
+};
+
+export default AnimationDemo;

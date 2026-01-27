@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+
 import { spinnerVariants } from '@/utils/animations';
 
 export default function AnimatedLoader() {

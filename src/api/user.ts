@@ -6,7 +6,7 @@ export const fetchUserProfile = async (): Promise<UserProfile> => {
   return response.json();
 };
 
-interface User {
+export interface User {
   id: number;
   name: string;
   email: string;

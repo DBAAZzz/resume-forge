@@ -1,6 +1,7 @@
+import { motion } from 'framer-motion';
 import { Outlet } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import { motion } from 'framer-motion';
+
 import { useCurrentUser } from '@/queries/useUserQueries';
 import {
   slideDownVariants,
