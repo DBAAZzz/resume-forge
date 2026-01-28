@@ -14,3 +14,9 @@ export interface Resume {
   status: 'draft' | 'published';
   completionScore: number;
 }
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+}

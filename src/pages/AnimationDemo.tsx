@@ -1,8 +1,13 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
-import { AnimatedPage, AnimatedButton, AnimatedCard, AnimatedLoader } from '@/components';
-import { containerVariants, itemVariants, pulseVariants } from '@/utils/animations';
+import {
+  AnimatedPage,
+  AnimatedButton,
+  AnimatedCard,
+  AnimatedLoader,
+} from '@/shared/components/animated';
+import { containerVariants, itemVariants, pulseVariants } from '@/shared/utils/animations';
 
 const AnimationDemo = () => {
   const [loading, setLoading] = useState(false);
@@ -52,7 +57,7 @@ const AnimationDemo = () => {
             className="grid grid-cols-1 md:grid-cols-3 gap-6"
           >
             {[1, 2, 3].map((i) => (
-              <AnimatedCard key={i} delay={i * 0.1}>
+              <AnimatedCard key={i}>
                 <h3 className="text-xl font-bold mb-2">Card {i}</h3>
                 <p className="text-gray-600">
                   This is an animated card with hover effects and staggered entrance.

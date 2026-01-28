@@ -23,9 +23,6 @@ export default defineConfig([
     },
     settings: {
       'import/resolver': {
-        node: {
-          extensions: ['.js', '.jsx', '.ts', '.tsx'],
-        },
         typescript: {
           alwaysTryTypes: true,
           project: ['./tsconfig.app.json', './tsconfig.node.json'],
@@ -67,6 +64,11 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+        noWarnOnMultipleProjects: true,
+      },
     },
   },
 ]);

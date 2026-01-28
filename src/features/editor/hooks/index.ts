@@ -1,0 +1,1 @@
+export { useTagHighlighter } from './useTagHighlighter';

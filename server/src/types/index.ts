@@ -54,12 +54,21 @@ export interface AnalysisItem {
 
 export interface ResumeAnalysisResponse {
   origin: string; // 原文
+  score: number; // 评分
   good: AnalysisItem[]; // 好的段落
   bad: AnalysisItem[]; // 不好的段落
 }
 
 // LLM 返回的原始格式（段落编号）
 export interface LLMAnalysisResult {
+  score?: number;
   good: Array<{ paragraphIndex: number; reason: string }>;
   bad: Array<{ paragraphIndex: number; reason: string }>;
 }
+
+export type SSEEvent =
+  | { type: 'start'; paragraphCount: number }
+  | { type: 'thinking'; text: string }
+  | { type: 'chunk'; text: string }
+  | { type: 'result'; data: ResumeAnalysisResponse }
+  | { type: 'error'; message: string };

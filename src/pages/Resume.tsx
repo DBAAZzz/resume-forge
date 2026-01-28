@@ -1,13 +1,10 @@
 import { motion } from 'framer-motion';
 
-import AnimatedCard from '@/components/AnimatedCard';
-import AnimatedLoader from '@/components/AnimatedLoader';
-import AnimatedPage from '@/components/AnimatedPage';
-import { Button } from '@/components/base/Button';
-import { Typography } from '@/components/base/Typography';
 import { useResumes } from '@/queries/useResumeQueries';
+import { AnimatedCard, AnimatedLoader, AnimatedPage } from '@/shared/components/animated';
+import { Button, Typography } from '@/shared/components/base';
+import { containerVariants, fadeInLeftVariants } from '@/shared/utils/animations';
 import { useResumeStore } from '@/store/useResumeStore';
-import { containerVariants, fadeInLeftVariants } from '@/utils/animations';
 
 const MotionTypography = motion(Typography);
 

@@ -1,8 +1,13 @@
 import { motion } from 'framer-motion';
 
-import AnimatedPage from '@/components/AnimatedPage';
-import { Typography } from '@/components/base/Typography';
-import { containerVariants, itemVariants, listItemHover, linkTextHover } from '@/utils/animations';
+import { AnimatedPage } from '@/shared/components/animated';
+import { Typography } from '@/shared/components/base';
+import {
+  containerVariants,
+  itemVariants,
+  listItemHover,
+  linkTextHover,
+} from '@/shared/utils/animations';
 
 const MotionTypography = motion(Typography);
 

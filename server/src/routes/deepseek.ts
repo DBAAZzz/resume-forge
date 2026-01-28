@@ -1,13 +1,14 @@
 import {
   runDeepseekAgent,
   runDeepseekAgentComplete,
-  analyzeResumeStructured,
-} from '../services/deepseek.service.js';
+  analyzeResumeStructuredStream,
+} from '@/services/deepseek.service.js';
 import {
   extractPromptFromFields,
   parseMultipartFile,
   validateTextFileType,
-} from '../utils/file.utils.js';
+} from '@/utils/file.utils.js';
+import { setStreamHeaders } from '@/utils/response.utils.js';
 
 import type { DeepseekRequest, ResumeAnalysisRequest } from '../types/index.js';
 import type { FastifyInstance } from 'fastify';
@@ -17,9 +18,7 @@ export async function deepseekRoutes(app: FastifyInstance) {
   app.post<{ Body: DeepseekRequest }>('/deepseek', async (request, reply) => {
     const { prompt } = request.body;
 
-    reply.raw.setHeader('Content-Type', 'application/x-ndjson');
-    reply.raw.setHeader('Cache-Control', 'no-cache');
-    reply.raw.setHeader('Connection', 'keep-alive');
+    setStreamHeaders(reply, 'ndjson');
 
     try {
       for await (const message of runDeepseekAgent({ prompt })) {
@@ -84,7 +83,7 @@ export async function deepseekRoutes(app: FastifyInstance) {
     }
   });
 
-  // Resume analysis endpoint - 分析简历并返回结构化 JSON
+  // Resume analysis endpoint - 分析简历并返回结构化 JSON (Streaming SSE)
   app.post<{ Body: ResumeAnalysisRequest }>('/deepseek/analyze-resume', async (request, reply) => {
     const { content } = request.body;
 
@@ -93,13 +92,24 @@ export async function deepseekRoutes(app: FastifyInstance) {
       return { error: 'Missing or invalid content field' };
     }
 
+    setStreamHeaders(reply, 'sse');
+
     try {
-      const result = await analyzeResumeStructured(content);
-      return result;
+      for await (const event of analyzeResumeStructuredStream(content)) {
+        reply.raw.write(`data: ${JSON.stringify(event)}\n\n`);
+      }
+      reply.raw.write('data: [DONE]\n\n');
     } catch (err) {
       request.log.error(err);
-      reply.code(500);
-      return { error: err instanceof Error ? err.message : String(err) };
+      // 如果头部已经发送，就发送一个错误事件
+      reply.raw.write(
+        `data: ${JSON.stringify({
+          type: 'error',
+          message: err instanceof Error ? err.message : String(err),
+        })}\n\n`
+      );
+    } finally {
+      reply.raw.end();
     }
   });
 }

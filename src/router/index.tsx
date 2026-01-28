@@ -1,18 +1,20 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import AnimatedLoader from '@/components/AnimatedLoader';
 import MainLayout from '@/layouts/MainLayout';
+import { AnimatedLoader } from '@/shared/components/animated';
 
-// 懒加载页面组件
+// Lazy load page components
 const Home = lazy(() => import('@/pages/Home'));
 const Resume = lazy(() => import('@/pages/Resume'));
-const Analysis = lazy(() => import('@/pages/analysis/Index'));
+const AnalysisPage = lazy(() =>
+  import('@/features/analysis').then((m) => ({ default: m.AnalysisPage }))
+);
 const Discover = lazy(() => import('@/pages/Discover'));
 const AnimationDemo = lazy(() => import('@/pages/AnimationDemo'));
 const DesignSystem = lazy(() => import('@/pages/DesignSystem'));
 
-// Suspense 包装器
+// Suspense wrapper
 const withSuspense = (Component: React.ComponentType) => (
   <Suspense fallback={<AnimatedLoader />}>
     <Component />
@@ -34,7 +36,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'analysis',
-        element: withSuspense(Analysis),
+        element: withSuspense(AnalysisPage),
       },
       {
         path: 'discover',

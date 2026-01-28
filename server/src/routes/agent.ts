@@ -1,4 +1,5 @@
 import { runAgent } from '@/services/agent.service.js';
+import { setStreamHeaders } from '@/utils/response.utils.js';
 
 import type { AgentRequest } from '../types/index.js';
 import type { FastifyInstance } from 'fastify';
@@ -7,9 +8,7 @@ export async function agentRoutes(app: FastifyInstance) {
   app.post<{ Body: AgentRequest }>('/agent', async (request, reply) => {
     const { prompt } = request.body;
 
-    reply.raw.setHeader('Content-Type', 'application/x-ndjson');
-    reply.raw.setHeader('Cache-Control', 'no-cache');
-    reply.raw.setHeader('Connection', 'keep-alive');
+    setStreamHeaders(reply, 'ndjson');
 
     try {
       for await (const message of runAgent({ prompt })) {
