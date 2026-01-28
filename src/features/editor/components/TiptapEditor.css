@@ -16,13 +16,29 @@
 }
 
 .tiptap-editor a {
-  @apply text-primary font-medium;
+  @apply text-primary font-medium underline decoration-primary/30 underline-offset-2 transition-all duration-200;
 }
 
 .tiptap-editor a:hover {
-  @apply text-primary/80;
+  @apply text-primary/80 decoration-primary/60;
 }
 
 .tiptap-editor strong {
   @apply text-foreground;
+}
+
+.tiptap-editor table {
+  @apply w-full border-collapse my-4;
+}
+
+.tiptap-editor th {
+  @apply bg-neutral-100 text-neutral-900 font-semibold text-left px-4 py-2 border border-neutral-300;
+}
+
+.tiptap-editor td {
+  @apply text-neutral-800 px-4 py-2 border border-neutral-300;
+}
+
+.tiptap-editor tr:hover {
+  @apply bg-neutral-50;
 }
