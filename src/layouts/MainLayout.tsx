@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Outlet } from 'react-router';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import { useCurrentUser } from '@/queries/useUserQueries';
 import {
@@ -19,8 +19,6 @@ const navItems = [
 
 export default function MainLayout() {
   const { data: currentUser, isLoading } = useCurrentUser();
-  const location = useLocation();
-  const isAnalysis = location.pathname.includes('/analysis');
 
   return (
     <div className="h-screen w-full bg-white text-black font-sans selection:bg-black selection:text-white flex flex-col overflow-hidden">
@@ -97,12 +95,8 @@ export default function MainLayout() {
       </motion.nav>
 
       {/* Scrollable Content Area */}
-      <div
-        className={`flex-1 flex w-full pt-16 ${isAnalysis ? 'overflow-hidden flex flex-col' : 'overflow-y-auto'}`}
-      >
-        <main
-          className={`w-full flex-1 mx-auto ${isAnalysis ? 'h-full flex-1 flex flex-col' : 'max-w-7xl px-6 pb-12'}`}
-        >
+      <div className={`flex-1 flex w-full pt-16 overflow-hidden flex flex-col}`}>
+        <main className={`w-full flex-1 mx-auto h-full flex-1 flex flex-col`}>
           <Outlet />
         </main>
       </div>

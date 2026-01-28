@@ -2,9 +2,8 @@ import mammoth from 'mammoth';
 import { PDFParse } from 'pdf-parse';
 import * as XLSX from 'xlsx';
 
-import { fileParserConfig, getFileCategory } from '../config/file-parser.config.js';
-
-import type { FileBuffer, ParsedFileContent } from '../types/index.js';
+import { fileParserConfig, getFileCategory } from '@/config/file-parser.config.js';
+import type { FileBuffer, ParsedFileContent } from '@/types/index.js';
 
 /**
  * 通用文件解析服务
@@ -77,8 +76,8 @@ export class FileParserService {
     mimeType: string
   ): Promise<ParsedFileContent> {
     try {
-      const data = await PDFParse(buffer);
-      const content = data.text;
+      const data = new PDFParse(buffer);
+      const content = (await data.getText()).text;
       const wordCount = this.countWords(content);
 
       return {
@@ -88,7 +87,6 @@ export class FileParserService {
           fileName,
           mimeType,
           fileSize: buffer.length,
-          pages: data.numpages,
           wordCount,
         },
       };

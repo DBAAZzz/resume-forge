@@ -1,6 +1,6 @@
-import { fileParserService } from '../services/file-parser.service.js';
+import { fileParserService } from '@/services/file-parser.service.js';
+import type { ParsedFileContent } from '@/types/index.js';
 
-import type { ParsedFileContent } from '../types/index.js';
 import type { MultipartFile } from '@fastify/multipart';
 
 /**

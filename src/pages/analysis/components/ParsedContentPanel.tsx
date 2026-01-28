@@ -1,4 +1,5 @@
 import { Typography } from '@/components/base/Typography';
+import { TiptapEditor } from '@/components/editor/TiptapEditor'; // Adjust path if needed
 import { useAnalysisStore } from '@/store/useAnalysisStore';
 
 const ParsedContentPanel = () => {
@@ -13,9 +14,10 @@ const ParsedContentPanel = () => {
         >
           Parsed Content
         </Typography>
-        <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none font-mono opacity-90 whitespace-pre-wrap">
-          {parsedContent}
-        </div>
+        <TiptapEditor
+          content={parsedContent || '<p>No content available</p>'}
+          className="min-h-[200px]"
+        />
       </div>
     </div>
   );

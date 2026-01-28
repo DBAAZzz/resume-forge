@@ -1,0 +1,28 @@
+/* Tiptap Editor 自定义样式 */
+.tiptap-editor h1 {
+  @apply font-display text-blue-600;
+}
+
+.tiptap-editor h2 {
+  @apply font-display text-neutral-900 text-xl font-medium leading-10;
+}
+
+.tiptap-editor h3 {
+  @apply font-display;
+}
+
+.tiptap-editor p {
+  @apply text-neutral-800 leading-7;
+}
+
+.tiptap-editor a {
+  @apply text-primary font-medium;
+}
+
+.tiptap-editor a:hover {
+  @apply text-primary/80;
+}
+
+.tiptap-editor strong {
+  @apply text-foreground;
+}

@@ -1,4 +1,4 @@
-import { runAgent } from '../services/agent.service.js';
+import { runAgent } from '@/services/agent.service.js';
 
 import type { AgentRequest } from '../types/index.js';
 import type { FastifyInstance } from 'fastify';

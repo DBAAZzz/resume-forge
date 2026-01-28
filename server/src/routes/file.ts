@@ -1,4 +1,4 @@
-import { parseMultipartFile } from '../utils/file.utils.js';
+import { parseMultipartFile } from '@/utils/file.utils.js';
 
 import type { FastifyInstance } from 'fastify';
 

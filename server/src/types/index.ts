@@ -1,5 +1,3 @@
-// Shared TypeScript types
-
 export interface AgentRequest {
   prompt: string;
 }
@@ -32,7 +30,6 @@ export interface ParsedFileContent {
     fileName?: string;
     mimeType?: string;
     fileSize?: number;
-    pages?: number; // PDF 页数
     wordCount?: number; // 字数统计
   };
 }

@@ -1,14 +1,13 @@
 import OpenAI from 'openai';
 
-import { config } from '../config/env.js';
-
+import { config } from '@/config/env.js';
 import type {
   DeepseekRequest,
   TextDelta,
   ResumeAnalysisResponse,
   LLMAnalysisResult,
   AnalysisItem,
-} from '../types/index.js';
+} from '@/types/index.js';
 
 /**
  * 构建包含文件内容的完整 prompt
