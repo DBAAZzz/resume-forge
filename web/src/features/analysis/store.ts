@@ -1,3 +1,4 @@
+import { SSE_TYPE } from '@resume/types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -11,7 +12,11 @@ export const useAnalysisStore = create<AnalysisState>()(
       file: null,
       fileName: null,
       parsedContent: null,
-      aiSuggestions: null,
+      aiSuggestions: {
+        score: -1,
+        strength: [],
+        weakness: [],
+      },
       status: 'idle',
       error: null,
       streamText: '',
@@ -42,36 +47,59 @@ export const useAnalysisStore = create<AnalysisState>()(
           error: null,
           streamText: '',
           thinkingText: '',
-          aiSuggestions: null,
+          aiSuggestions: {
+            score: -1,
+            strength: [],
+            weakness: [],
+          },
         });
 
         try {
           const content = parsedContent;
           for await (const event of analyzeResumeStream(content)) {
             switch (event.type) {
-              case 'start':
+              case SSE_TYPE.START:
                 break;
-              case 'thinking':
-                set((state) => ({ thinkingText: state.thinkingText + event.text }));
+              case SSE_TYPE.THINKING:
+                set((state) => ({ thinkingText: state.thinkingText + event.value }));
                 break;
-              case 'chunk':
+              case SSE_TYPE.SCORE: {
+                set((state) => ({
+                  aiSuggestions: {
+                    ...state.aiSuggestions,
+                    score: event.value,
+                  },
+                }));
                 break;
-              case 'result':
+              }
+              case SSE_TYPE.STRENGTH: {
+                set((state) => ({
+                  aiSuggestions: {
+                    ...state.aiSuggestions,
+                    strength: [...state.aiSuggestions.strength, event.value],
+                  },
+                }));
+                break;
+              }
+              case SSE_TYPE.WEAKNESS: {
+                set((state) => ({
+                  aiSuggestions: {
+                    ...state.aiSuggestions,
+                    weakness: [...state.aiSuggestions.weakness, event.value],
+                  },
+                }));
+                break;
+              }
+              case SSE_TYPE.DONE:
                 set({
                   status: 'done',
-                  aiSuggestions: {
-                    good: event.data.good,
-                    bad: event.data.bad,
-                    score: event.data.score,
-                  },
                 });
                 break;
               case 'error':
-                throw new Error(event.message);
+                throw new Error(event.value);
             }
           }
         } catch (error) {
-          console.error('Analysis failed:', error);
           set({
             status: 'error',
             error: error instanceof Error ? error.message : 'Analysis failed',
@@ -84,7 +112,11 @@ export const useAnalysisStore = create<AnalysisState>()(
           file: null,
           fileName: null,
           parsedContent: null,
-          aiSuggestions: null,
+          aiSuggestions: {
+            score: -1,
+            strength: [],
+            weakness: [],
+          },
           status: 'idle',
           error: null,
           streamText: '',

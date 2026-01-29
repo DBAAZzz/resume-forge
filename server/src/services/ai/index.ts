@@ -3,4 +3,9 @@ export {
   resumeAnalysisSchema,
   analysisItemSchema,
   type ResumeAnalysisSchemaType,
+  deepInsightSchema,
+  timelineIssueSchema,
+  skillIssueSchema,
+  metricSuggestionSchema,
+  type DeepInsightSchemaType,
 } from './schemas.js';

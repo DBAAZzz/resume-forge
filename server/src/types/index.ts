@@ -9,6 +9,6 @@ export interface FileBuffer {
 
 export interface LLMAnalysisResult {
   score?: number;
-  good: Array<{ paragraphIndex: number; reason: string }>;
-  bad: Array<{ paragraphIndex: number; reason: string }>;
+  strength: Array<{ paragraphIndex: number; reason: string }>;
+  weakness: Array<{ paragraphIndex: number; reason: string }>;
 }

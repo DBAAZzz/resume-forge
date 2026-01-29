@@ -12,7 +12,7 @@ declare module '@tiptap/core' {
       insertTag: (attributes: {
         label: string;
         id?: string;
-        type?: 'good' | 'bad' | 'neutral';
+        type?: 'strength' | 'weakness' | 'neutral';
       }) => ReturnType;
     };
   }
@@ -60,7 +60,15 @@ export const TagNode = Node.create({
   addCommands() {
     return {
       insertTag:
-        ({ label, id, type }: { label: string; id?: string; type?: 'good' | 'bad' | 'neutral' }) =>
+        ({
+          label,
+          id,
+          type,
+        }: {
+          label: string;
+          id?: string;
+          type?: 'strength' | 'weakness' | 'neutral';
+        }) =>
         ({ commands }: CommandProps) => {
           return commands.insertContent({
             type: this.name,

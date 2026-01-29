@@ -6,9 +6,9 @@ const TagComponent = (props: NodeViewProps) => {
 
   const getTypeStyles = () => {
     switch (type) {
-      case 'good':
+      case 'strength':
         return selected ? 'text-white shadow-sm ring-2 ring-green-300' : ' text-green-500';
-      case 'bad':
+      case 'weakness':
         return selected
           ? ' text-white shadow-sm ring-2 ring-red-300'
           : ' text-red-500 underline decoration-wavy underline-red-300';

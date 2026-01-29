@@ -1,7 +1,12 @@
 import { Menu, Transition } from '@headlessui/react';
 import { motion } from 'framer-motion';
-import { Settings, RotateCcw, Sparkles, User, Monitor, LogOut } from 'lucide-react';
-import { Fragment, useState } from 'react';
+import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import Monitor from 'lucide-react/dist/esm/icons/monitor';
+import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import User from 'lucide-react/dist/esm/icons/user';
+import { Fragment, useState, memo } from 'react';
 
 import { cn } from '@/shared/utils/classnames';
 
@@ -14,7 +19,7 @@ interface SidebarItemProps {
   active?: boolean;
 }
 
-const SidebarItem = ({ icon: Icon, label, onClick, active }: SidebarItemProps) => {
+const SidebarItem = memo(({ icon: Icon, label, onClick, active }: SidebarItemProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -57,9 +62,11 @@ const SidebarItem = ({ icon: Icon, label, onClick, active }: SidebarItemProps) =
       </Transition>
     </div>
   );
-};
+});
 
-const SettingsMenu = () => {
+SidebarItem.displayName = 'SidebarItem';
+
+const SettingsMenu = memo(() => {
   return (
     <Menu as="div" className="relative flex items-center justify-center">
       {({ open }) => (
@@ -140,9 +147,11 @@ const SettingsMenu = () => {
       )}
     </Menu>
   );
-};
+});
 
-export const DashboardSidebar = () => {
+SettingsMenu.displayName = 'SettingsMenu';
+
+export const DashboardSidebar = memo(() => {
   const { resetAnalysis } = useAnalysisStore();
 
   return (
@@ -164,6 +173,8 @@ export const DashboardSidebar = () => {
       </div>
     </motion.div>
   );
-};
+});
+
+DashboardSidebar.displayName = 'DashboardSidebar';
 
 export default DashboardSidebar;

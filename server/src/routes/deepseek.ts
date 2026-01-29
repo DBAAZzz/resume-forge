@@ -2,6 +2,7 @@ import {
   runDeepseekAgent,
   runDeepseekAgentComplete,
   analyzeResumeStructuredStream,
+  analyzeResumeDeepInsights,
 } from '@/services/deepseek.service.js';
 import {
   extractPromptFromFields,
@@ -64,8 +65,6 @@ export async function deepseekRoutes(app: FastifyInstance) {
           return { error: error instanceof Error ? error.message : String(error) };
         }
 
-        console.log('文件内容为', parsedFile.content);
-
         fileContent = parsedFile.content;
       } else {
         // 处理普通 JSON 请求
@@ -112,4 +111,37 @@ export async function deepseekRoutes(app: FastifyInstance) {
       reply.raw.end();
     }
   });
+
+  // Deep insights analysis endpoint - 深度洞察分析（时间线审计 + 技能一致性 + 指标挖掘）(Streaming SSE)
+  app.post<{ Body: ResumeAnalysisRequest }>(
+    '/deepseek/analyze/deep-insights',
+    async (request, reply) => {
+      const { content } = request.body;
+
+      if (!content || typeof content !== 'string') {
+        reply.code(400);
+        return { error: 'Missing or invalid content field' };
+      }
+
+      setStreamHeaders(reply, 'sse');
+
+      try {
+        for await (const event of analyzeResumeDeepInsights(content)) {
+          reply.raw.write(`data: ${JSON.stringify(event)}\n\n`);
+        }
+        reply.raw.write('data: [DONE]\n\n');
+      } catch (err) {
+        request.log.error(err);
+        // 如果头部已经发送，就发送一个错误事件
+        reply.raw.write(
+          `data: ${JSON.stringify({
+            type: 'error',
+            message: err instanceof Error ? err.message : String(err),
+          })}\n\n`
+        );
+      } finally {
+        reply.raw.end();
+      }
+    }
+  );
 }

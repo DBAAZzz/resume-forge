@@ -1,5 +1,5 @@
 import { useEditor, EditorContent } from '@tiptap/react';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { cn } from '@/shared/utils/classnames';
 
@@ -12,8 +12,8 @@ interface TiptapEditorProps {
   className?: string;
   editable?: boolean;
   suggestions?: {
-    good: Array<{ content: string; reason: string; startIndex: number; endIndex: number }>;
-    bad: Array<{ content: string; reason: string; startIndex: number; endIndex: number }>;
+    strength: Array<{ content: string; reason: string }>;
+    weakness: Array<{ content: string; reason: string }>;
     score: number;
   } | null;
   onSuggestionsChange?: (suggestions: TiptapEditorProps['suggestions']) => void;
@@ -41,37 +41,40 @@ export const TiptapEditor = ({
     },
   });
 
-  // Prepare recommendations for the highlighter
   const recommendations = useMemo(() => {
     if (!suggestions) return [];
 
-    const goodRecs = suggestions.good.map((item) => ({
+    const goodRecs = suggestions.strength.map((item) => ({
       id: item.content,
       originalText: item.content,
-      type: 'good' as const,
+      type: 'strength' as const,
       suggestion: item.reason,
     }));
 
-    const badRecs = suggestions.bad.map((item) => ({
+    const badRecs = suggestions.weakness.map((item) => ({
       id: item.content,
       originalText: item.content,
-      type: 'bad' as const,
+      type: 'weakness' as const,
       suggestion: item.reason,
     }));
 
     return [...goodRecs, ...badRecs];
   }, [suggestions]);
-
+  // 触发更新简历高光
   useTagHighlighter(editor, recommendations);
 
-  // Keep editor content in sync with prop updates
+  // 跟踪内容变化，避免在初始化时重置编辑器
+  const prevContentRef = useRef(content);
+
+  // 保持编辑器内容与 prop 同步（仅在内容变化时更新，而非编辑器初始化时）
   useEffect(() => {
-    if (editor && content) {
+    if (editor && content && content !== prevContentRef.current) {
       editor.commands.setContent(content);
+      prevContentRef.current = content;
     }
   }, [content, editor]);
 
-  // Update editable state
+  // 更新可编辑状态
   useEffect(() => {
     if (editor) {
       editor.setEditable(editable);
@@ -95,10 +98,8 @@ export const TiptapEditor = ({
           <button
             onClick={() =>
               onSuggestionsChange({
-                good: [
-                  { content: 'React', reason: 'Strong market demand', startIndex: 0, endIndex: 0 },
-                ],
-                bad: [{ content: 'Word', reason: 'Use PDF format', startIndex: 0, endIndex: 0 }],
+                strength: [{ content: 'React', reason: 'Strong market demand' }],
+                weakness: [{ content: 'Word', reason: 'Use PDF format' }],
                 score: 85,
               })
             }

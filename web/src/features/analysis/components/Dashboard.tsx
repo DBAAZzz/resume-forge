@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
+import { Group, Panel, Separator } from 'react-resizable-panels';
 
-import { AISuggestionsPanel } from './AIPanel';
+import { AISuggestionsPanel } from './AIPanel/index';
 import { ParsedContentPanel } from './ParsedContentPanel';
 import { DashboardSidebar } from './Sidebar';
 
@@ -13,13 +14,24 @@ export const AnalysisDashboard = () => {
     >
       <DashboardSidebar />
 
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 h-full">
-        <div className="h-full overflow-hidden">
-          <ParsedContentPanel />
-        </div>
-        <div className="h-full overflow-hidden bg-card/10 backdrop-blur-sm">
-          <AISuggestionsPanel />
-        </div>
+      <div className="flex-1 h-full overflow-hidden">
+        <Group orientation="horizontal">
+          <Panel defaultSize="40%" minSize="30%" className="h-full">
+            <div className="h-full overflow-auto mx-12">
+              <ParsedContentPanel />
+            </div>
+          </Panel>
+
+          <Separator className="relative flex w-2 items-center justify-center bg-transparent transition-colors hover:bg-primary/10 data-[resize-handle-state=drag]:bg-primary/20 cursor-col-resize group z-10">
+            <div className="flex h-8 w-1 items-center justify-center rounded-full bg-border transition-colors group-hover:bg-primary group-data-[resize-handle-state=drag]:bg-primary" />
+          </Separator>
+
+          <Panel defaultSize="60%" minSize="30%" className="h-full">
+            <div className="h-full overflow-hidden bg-card/10 backdrop-blur-sm">
+              <AISuggestionsPanel />
+            </div>
+          </Panel>
+        </Group>
       </div>
     </motion.div>
   );
