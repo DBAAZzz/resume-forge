@@ -1,4 +1,3 @@
-// Re-export shared types for backward compatibility
 export * from '@resume/types';
 
 // Server-only types

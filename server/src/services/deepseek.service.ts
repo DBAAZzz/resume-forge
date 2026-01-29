@@ -1,14 +1,8 @@
-import OpenAI from 'openai';
+import { generateText, streamText, Output } from 'ai';
 
-import { config } from '@/config/env.js';
-import type {
-  DeepseekRequest,
-  TextDelta,
-  ResumeAnalysisResponse,
-  LLMAnalysisResult,
-  AnalysisItem,
-  SSEEvent,
-} from '@/types/index.js';
+import type { DeepseekRequest, TextDelta, SSEEvent } from '@/types/index.js';
+
+import { models, resumeAnalysisSchema } from './ai/index.js';
 
 /**
  * 构建包含文件内容的完整 prompt
@@ -27,25 +21,16 @@ function buildPromptWithFile(request: DeepseekRequest): string {
 
 // Streaming version
 export async function* runDeepseekAgent(request: DeepseekRequest): AsyncGenerator<TextDelta> {
-  const client = new OpenAI({
-    baseURL: config.deepseek.baseUrl,
-    apiKey: config.deepseek.apiKey,
-  });
-
   const fullPrompt = buildPromptWithFile(request);
 
   try {
-    const stream = await client.chat.completions.create({
-      messages: [{ role: 'user', content: fullPrompt }],
-      model: 'deepseek-chat',
-      stream: true,
+    const { textStream } = await streamText({
+      model: models.deepseek.chat,
+      prompt: fullPrompt,
     });
 
-    for await (const chunk of stream) {
-      const content = chunk.choices[0]?.delta?.content || '';
-      if (content) {
-        yield { type: 'text_delta', text: content };
-      }
+    for await (const textPart of textStream) {
+      yield { type: 'text_delta', text: textPart };
     }
   } catch (error) {
     console.error('Error running Deepseek agent:', error);
@@ -55,21 +40,15 @@ export async function* runDeepseekAgent(request: DeepseekRequest): AsyncGenerato
 
 // Non-streaming version
 export async function runDeepseekAgentComplete(request: DeepseekRequest): Promise<string> {
-  const client = new OpenAI({
-    baseURL: config.deepseek.baseUrl,
-    apiKey: config.deepseek.apiKey,
-  });
-
   const fullPrompt = buildPromptWithFile(request);
 
   try {
-    const response = await client.chat.completions.create({
-      messages: [{ role: 'user', content: fullPrompt }],
-      model: 'deepseek-chat',
-      stream: false,
+    const { text } = await generateText({
+      model: models.deepseek.chat,
+      prompt: fullPrompt,
     });
 
-    return response.choices[0]?.message?.content || '';
+    return text;
   } catch (error) {
     console.error('Error running Deepseek agent (complete):', error);
     throw error;
@@ -130,8 +109,7 @@ function buildAnalysisPrompt(paragraphs: ParagraphInfo[]): string {
     **重要要求**：
     1. 使用段落编号（如 0, 1, 2...）来标识段落
     2. 每个段落只分析一次，不要重复
-    3. 必须返回有效的 JSON 格式
-    4. **跳过无实际意义的段落**：不要评价以下类型的段落，直接忽略它们：
+    3. **跳过无实际意义的段落**：不要评价以下类型的段落，直接忽略它们：
       - 标题（如"教育背景"、"工作经历"、"个人信息"等）
       - 公司名称、学校名称、职位名称等单独成行的文本
       - 日期、时间段（如"2020年-2023年"）
@@ -143,127 +121,21 @@ function buildAnalysisPrompt(paragraphs: ParagraphInfo[]): string {
     - 好的段落（good）：有具体数据、量化结果、真实案例、清晰的技能描述、突出的成就
     - 不好的段落（bad）：空泛模糊、缺少数据支撑、表述含糊、夸大其词、无关紧要的信息
 
-    请以 JSON 格式返回，结构如下：
-    {
-      "good": [
-        { "paragraphIndex": 0, "reason": "说明为什么好" }
-      ],
-      "bad": [
-        { "paragraphIndex": 2, "reason": "说明为什么不好" }
-      ]
-    }
-
     以下是带编号的简历段落：
     ${numberedParagraphs}`;
 }
 
 /**
- * 分析简历内容（使用段落编号法 + JSON mode）
- */
-export async function analyzeResumeStructured(content: string): Promise<ResumeAnalysisResponse> {
-  const client = new OpenAI({
-    baseURL: config.deepseek.baseUrl,
-    apiKey: config.deepseek.apiKey,
-  });
-
-  // 1. 分割段落
-  const paragraphs = splitIntoParagraphs(content);
-
-  if (paragraphs.length === 0) {
-    return {
-      origin: content,
-      score: 0,
-      good: [],
-      bad: [],
-    };
-  }
-
-  // 2. 构建 prompt
-  const prompt = buildAnalysisPrompt(paragraphs);
-
-  // 3. 调用 API（启用 JSON mode）
-  const response = await client.chat.completions.create({
-    messages: [
-      {
-        role: 'system',
-        content: '你是一个专业的简历分析助手，请严格按照 JSON 格式返回分析结果。',
-      },
-      { role: 'user', content: prompt },
-    ],
-    model: 'deepseek-reasoner',
-    stream: false,
-    response_format: { type: 'json_object' },
-    max_tokens: 8192,
-  });
-
-  const rawResult = response.choices[0]?.message?.content || '{}';
-
-  // 4. 解析 LLM 返回的 JSON
-  let llmResult: LLMAnalysisResult;
-  try {
-    // Clean markdown code blocks if present (deepseek-reasoner might output markdown)
-    const cleanJson = rawResult.replace(/```json\n?|\n?```/g, '').trim();
-    llmResult = JSON.parse(cleanJson);
-  } catch {
-    console.error('Failed to parse LLM response:', rawResult);
-    throw new Error('AI returned invalid JSON format');
-  }
-
-  // 5. 映射段落编号到实际内容和位置
-  const mapToAnalysisItem = (item: {
-    paragraphIndex: number;
-    reason: string;
-  }): AnalysisItem | null => {
-    const paragraph = paragraphs.find((p) => p.index === item.paragraphIndex);
-    if (!paragraph) {
-      console.warn(`Paragraph index ${item.paragraphIndex} not found`);
-      return null;
-    }
-    return {
-      content: paragraph.content,
-      reason: item.reason,
-      startIndex: paragraph.startIndex,
-      endIndex: paragraph.endIndex,
-    };
-  };
-
-  const good: AnalysisItem[] = (llmResult.good || [])
-    .map(mapToAnalysisItem)
-    .filter((item): item is AnalysisItem => item !== null);
-
-  const bad: AnalysisItem[] = (llmResult.bad || [])
-    .map(mapToAnalysisItem)
-    .filter((item): item is AnalysisItem => item !== null);
-
-  return {
-    origin: content,
-    score: llmResult.score || 0,
-    good,
-    bad,
-  };
-}
-
-/**
- * 分析简历内容（SSE 流式版）
+ * 分析简历内容（SSE 流式版 - 真正的 Progressive JSON Parsing）
  */
 export async function* analyzeResumeStructuredStream(content: string): AsyncGenerator<SSEEvent> {
-  const client = new OpenAI({
-    baseURL: config.deepseek.baseUrl,
-    apiKey: config.deepseek.apiKey,
-  });
-
   // 1. 分割段落
   const paragraphs = splitIntoParagraphs(content);
 
   if (paragraphs.length === 0) {
     yield {
       type: 'result',
-      data: {
-        origin: content,
-        score: 0,
-        good: [],
-        bad: [],
-      },
+      data: { origin: content, score: 0, good: [], bad: [] },
     };
     return;
   }
@@ -274,87 +146,130 @@ export async function* analyzeResumeStructuredStream(content: string): AsyncGene
   // 2. 构建 prompt
   const prompt = buildAnalysisPrompt(paragraphs);
 
-  // 3. 调用 API（流式 + JSON mode）
+  // 3. 调用 API（流式结构化输出）
+  // 使用 deepseek-reasoner 模型以获得更好的推理能力
   try {
-    const stream = await client.chat.completions.create({
-      messages: [
-        {
-          role: 'system',
-          content: '你是一个专业的简历分析助手，请严格按照 JSON 格式返回分析结果。',
-        },
-        { role: 'user', content: prompt },
-      ],
-      model: 'deepseek-reasoner',
-      stream: true,
-      response_format: { type: 'json_object' },
-      max_tokens: 8192,
+    const { fullStream } = await streamText({
+      model: models.deepseek.reasoner,
+      output: Output.object({ schema: resumeAnalysisSchema }),
+      prompt,
+      system: '你是一个专业的简历分析助手。',
     });
 
-    let fullContent = '';
+    console.log('✅ Stream created successfully');
 
-    for await (const chunk of stream) {
-      // Handle reasoning content (thinking)
-      const reasoning = (chunk.choices[0]?.delta as any).reasoning_content;
-      if (reasoning) {
-        yield { type: 'thinking', text: reasoning };
-      }
+    // 追踪已发送的条目，避免重复发送
+    const sentGoodIndices = new Set<number>();
+    const sentBadIndices = new Set<number>();
+    let accumulatedJson = '';
+    let lastSentScore: number | undefined;
 
-      // Handle normal content
-      const content = chunk.choices[0]?.delta?.content || '';
-      if (content) {
-        yield { type: 'chunk', text: content };
-        fullContent += content;
-      }
-    }
-
-    // 4. 解析最终 JSON
-    let llmResult: LLMAnalysisResult;
-    try {
-      const cleanJson = fullContent.replace(/```json\n?|\n?```/g, '').trim();
-      llmResult = JSON.parse(cleanJson);
-    } catch {
-      console.error('Failed to parse LLM response:', fullContent);
-      throw new Error('AI returned invalid JSON format');
-    }
-
-    // 5. 映射结果
-    // 复用逻辑：映射段落编号到实际内容和位置
-    const mapToAnalysisItem = (item: {
-      paragraphIndex: number;
-      reason: string;
-    }): AnalysisItem | null => {
-      const paragraph = paragraphs.find((p) => p.index === item.paragraphIndex);
-      if (!paragraph) {
-        console.warn(`Paragraph index ${item.paragraphIndex} not found`);
-        return null;
-      }
+    // 辅助函数：映射段落索引到内容
+    const mapItem = (item: { paragraphIndex: number; reason: string }) => {
+      const p = paragraphs.find((p) => p.index === item.paragraphIndex);
+      if (!p) return null;
       return {
-        content: paragraph.content,
+        content: p.content,
         reason: item.reason,
-        startIndex: paragraph.startIndex,
-        endIndex: paragraph.endIndex,
       };
     };
 
-    const good: AnalysisItem[] = (llmResult.good || [])
-      .map(mapToAnalysisItem)
-      .filter((item): item is AnalysisItem => item !== null);
+    // Regex patterns
+    const goodItemRegex = /"paragraphIndex":\s*(\d+),\s*"reason":\s*"((?:[^"\\]|\\.)*)"/g;
+    const scoreRegex = /"score":\s*(\d+)/;
 
-    const bad: AnalysisItem[] = (llmResult.bad || [])
-      .map(mapToAnalysisItem)
-      .filter((item): item is AnalysisItem => item !== null);
+    for await (const part of fullStream) {
+      if (part.type === 'reasoning-delta') {
+        yield { type: 'thinking', text: part.text };
+      } else if (part.type === 'text-delta') {
+        accumulatedJson += part.text;
 
-    yield {
-      type: 'result',
-      data: {
-        origin: content,
-        score: llmResult.score || 0,
-        good,
-        bad,
-      },
-    };
-  } catch (error) {
-    console.error('DeepSeek stream analysis error:', error);
+        // Manual Extraction Logic
+
+        // 1. Determine sections boundaries
+        const goodStartMatch = accumulatedJson.match(/"good":\s*\[/);
+        const badStartMatch = accumulatedJson.match(/"bad":\s*\[/);
+
+        const goodStartIndex = goodStartMatch
+          ? goodStartMatch.index! + goodStartMatch[0].length
+          : -1;
+        const badStartIndex = badStartMatch ? badStartMatch.index! + badStartMatch[0].length : -1;
+
+        // Find all items
+        const matches = [...accumulatedJson.matchAll(goodItemRegex)];
+
+        for (const match of matches) {
+          const index = parseInt(match[1], 10);
+          const reason = match[2];
+          const itemIndex = match.index!;
+
+          const itemData = { paragraphIndex: index, reason };
+
+          // Determine if it is in 'good' or 'bad'
+          // If we have both arrays started, we decide based on position
+          // Assuming 'good' comes first usually, but checking indices is safer
+
+          let isGood = false;
+          let isBad = false;
+
+          if (goodStartIndex !== -1 && (badStartIndex === -1 || itemIndex < badStartIndex)) {
+            // Likely in good
+            if (itemIndex > goodStartIndex) isGood = true;
+          }
+
+          if (badStartIndex !== -1) {
+            if (itemIndex > badStartIndex) isBad = true;
+          }
+
+          if (isGood) {
+            if (!sentGoodIndices.has(index)) {
+              const mapped = mapItem(itemData);
+              if (mapped) {
+                yield { type: 'good_item', data: mapped };
+                sentGoodIndices.add(index);
+              }
+            }
+          } else if (isBad) {
+            if (!sentBadIndices.has(index)) {
+              const mapped = mapItem(itemData);
+              if (mapped) {
+                yield { type: 'bad_item', data: mapped };
+                sentBadIndices.add(index);
+              }
+            }
+          }
+        }
+
+        // Check Score
+        const scoreMatch = accumulatedJson.match(scoreRegex);
+        if (scoreMatch) {
+          const score = parseInt(scoreMatch[1], 10);
+          if (score !== lastSentScore) {
+            yield { type: 'score', value: score };
+            lastSentScore = score;
+          }
+        }
+      }
+    }
+
+    // 最后发送完整结果作为兜底（可选，保持兼容性）
+    yield { type: 'done' };
+  } catch (error: any) {
+    console.error('=== DeepSeek API Error ===');
+    console.error('Error type:', error.constructor.name);
+    console.error('Error message:', error.message);
+    console.error('Error name:', error.name);
+    if (error.url) console.error('Request URL:', error.url);
+    if (error.statusCode) console.error('Status Code:', error.statusCode);
+    if (error.responseHeaders) console.error('Response Headers:', error.responseHeaders);
+    if (error.responseBody) console.error('Response Body:', error.responseBody);
+    if (error.cause) {
+      console.error('Error Cause:', error.cause);
+      if (error.cause.url) console.error('Cause URL:', error.cause.url);
+    }
+    console.error('Full error object:', JSON.stringify(error, null, 2));
+    console.error('Error stack:', error.stack);
+
     yield { type: 'error', message: error instanceof Error ? error.message : String(error) };
   }
 }

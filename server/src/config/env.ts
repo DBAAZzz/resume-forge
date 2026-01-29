@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 // Environment configuration
 // Using getters to ensure env vars are read after dotenv.config()
 export const config = {
@@ -6,7 +8,12 @@ export const config = {
       return process.env.DEEPSEEK_API_KEY;
     },
     get baseUrl() {
-      return process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com';
+      return process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com/v1';
+    },
+  },
+  anthropic: {
+    get apiKey() {
+      return process.env.ANTHROPIC_API_KEY;
     },
   },
   server: {
