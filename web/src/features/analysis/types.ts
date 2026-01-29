@@ -1,30 +1,10 @@
-export interface AnalysisItem {
-  content: string;
-  reason: string;
-  startIndex: number;
-  endIndex: number;
-}
+// Re-export shared types for backward compatibility
+export * from '@resume/types';
 
-export interface AnalysisResponse {
-  content: string;
-  type: string;
-  metadata: Record<string, string>;
-}
+// Import types needed for local type definitions
+import type { AnalysisItem } from '@resume/types';
 
-export interface ResumeAnalysisResponse {
-  origin: string;
-  score: number;
-  good: AnalysisItem[];
-  bad: AnalysisItem[];
-}
-
-export type SSEEvent =
-  | { type: 'start'; paragraphCount: number }
-  | { type: 'thinking'; text: string }
-  | { type: 'chunk'; text: string }
-  | { type: 'result'; data: ResumeAnalysisResponse }
-  | { type: 'error'; message: string };
-
+// Web-only types
 export interface Suggestions {
   good: AnalysisItem[];
   bad: AnalysisItem[];

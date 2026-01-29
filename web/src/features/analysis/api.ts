@@ -1,13 +1,13 @@
 import { api, uploadFile } from '@/shared/utils/fetch';
 
-import type { AnalysisResponse, SSEEvent } from './types';
+import type { ParsedFileContent, SSEEvent } from './types';
 
 /**
  * Upload a file to parse its content
  * POST /file/parse
  */
-export const parseFile = async (file: File): Promise<AnalysisResponse> => {
-  return uploadFile<AnalysisResponse>('/file/parse', file);
+export const parseFile = async (file: File): Promise<ParsedFileContent> => {
+  return uploadFile<ParsedFileContent>('/file/parse', file);
 };
 
 /**

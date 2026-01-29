@@ -7,7 +7,6 @@ export { useAnalysisStore } from './store';
 // Types
 export type {
   AnalysisItem,
-  AnalysisResponse,
   AnalysisState,
   ResumeAnalysisResponse,
   SSEEvent,

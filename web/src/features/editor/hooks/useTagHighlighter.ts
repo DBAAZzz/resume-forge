@@ -99,6 +99,7 @@ export const useTagHighlighter = (
 };
 
 function escapeRegExp(string: string) {
+  if (typeof string !== 'string') return '';
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
@@ -107,6 +108,7 @@ function escapeRegExp(string: string) {
  * Supports formats like: "1. ", "2、", "3) ", "4）", etc.
  */
 function removeLeadingNumber(text: string): string {
+  if (typeof text !== 'string') return '';
   return text.replace(/^\d+[.、)）]\s*/, '');
 }
 
@@ -115,6 +117,7 @@ function removeLeadingNumber(text: string): string {
  * Removes: **bold**, *italic*, __bold__, _italic_, `code`, [links](url), etc.
  */
 function stripMarkdown(text: string): string {
+  if (typeof text !== 'string') return '';
   return text
     .replace(/\*\*(.+?)\*\*/g, '$1') // **bold**
     .replace(/\*(.+?)\*/g, '$1') // *italic*

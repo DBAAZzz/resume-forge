@@ -29,7 +29,7 @@ async function enableMocking() {
 
   return;
   // 暂时不需要 mock
-  const { worker } = await import('./mocks/browser');
+  const { worker } = await import('./mocks/browser.ts');
 
   return worker.start();
 }
