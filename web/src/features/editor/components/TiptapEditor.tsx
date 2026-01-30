@@ -22,7 +22,7 @@ interface TiptapEditorProps {
 export const TiptapEditor = ({
   content,
   className,
-  editable = false,
+  editable = true,
   suggestions,
   onSuggestionsChange,
 }: TiptapEditorProps) => {
@@ -48,14 +48,14 @@ export const TiptapEditor = ({
       id: item.content,
       originalText: item.content,
       type: 'strength' as const,
-      suggestion: item.reason,
+      reason: item.reason,
     }));
 
     const badRecs = suggestions.weakness.map((item) => ({
       id: item.content,
       originalText: item.content,
       type: 'weakness' as const,
-      suggestion: item.reason,
+      reason: item.reason,
     }));
 
     return [...goodRecs, ...badRecs];

@@ -5,7 +5,7 @@ interface TagRecommendation {
   id: string;
   originalText: string;
   type: 'strength' | 'weakness' | 'neutral';
-  suggestion?: string;
+  reason?: string;
 }
 
 export const useTagHighlighter = (
@@ -96,6 +96,7 @@ export const useTagHighlighter = (
         match.to,
         editor.schema.nodes.tag.create({
           label: stripMarkdown(match.rec.originalText),
+          reason: match.rec.reason,
           id: match.rec.id,
           type: match.rec.type,
         })

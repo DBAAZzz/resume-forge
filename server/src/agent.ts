@@ -23,8 +23,6 @@ export async function* runAgent(request: AgentRequest) {
       options,
     });
 
-    console.log('q', q);
-
     for await (const message of q) {
       yield message;
     }

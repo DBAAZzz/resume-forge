@@ -10,6 +10,7 @@ import { Fragment, useState, memo } from 'react';
 
 import { cn } from '@/shared/utils/classnames';
 
+import { useDeepAnalysisStore } from '../deepAnalysisStore';
 import { useAnalysisStore } from '../store';
 
 interface SidebarItemProps {
@@ -153,6 +154,12 @@ SettingsMenu.displayName = 'SettingsMenu';
 
 export const DashboardSidebar = memo(() => {
   const { resetAnalysis } = useAnalysisStore();
+  const { resetDeepAnalysis } = useDeepAnalysisStore();
+
+  const reset = () => {
+    resetAnalysis();
+    resetDeepAnalysis();
+  };
 
   return (
     <motion.div
@@ -163,7 +170,7 @@ export const DashboardSidebar = memo(() => {
     >
       <div className="flex flex-col gap-6">
         <SidebarItem icon={Sparkles} label="AI Analysis" active onClick={() => {}} />
-        <SidebarItem icon={RotateCcw} label="Re-upload" onClick={resetAnalysis} />
+        <SidebarItem icon={RotateCcw} label="Re-upload" onClick={reset} />
       </div>
 
       <div className="flex-1" />

@@ -12,7 +12,7 @@
 }
 
 .tiptap-editor p {
-  @apply text-neutral-800 leading-7;
+  @apply text-neutral-700 leading-7;
 }
 
 .tiptap-editor a {

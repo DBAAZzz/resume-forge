@@ -1,56 +1,17 @@
 import { motion } from 'framer-motion';
-import { Sparkles, Radar } from 'lucide-react';
+import { Radar } from 'lucide-react';
 import { useState } from 'react';
 
 import { cn } from '@/shared/utils/classnames';
 
+import { DeepAnalysisTab } from './DeepAnalysisTab';
 import { ResumeScanTab } from './ResumeScanTab';
 
-// Deep Analysis Placeholder - Squared/Technical Design
-const DeepAnalysisTab = () => {
-  return (
-    <div className="flex flex-col items-center justify-center h-full p-8 text-center animate-in fade-in duration-500 bg-slate-50/50">
-      <div className="border border-slate-200 bg-white p-8 mb-6 relative">
-        {/* Technical decorative corners */}
-        <div className="absolute -top-1 -left-1 w-2 h-2 border-t-2 border-l-2 border-slate-400" />
-        <div className="absolute -top-1 -right-1 w-2 h-2 border-t-2 border-r-2 border-slate-400" />
-        <div className="absolute -bottom-1 -left-1 w-2 h-2 border-b-2 border-l-2 border-slate-400" />
-        <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b-2 border-r-2 border-slate-400" />
-
-        <Radar className="w-8 h-8 text-slate-700" strokeWidth={1.5} />
-      </div>
-
-      <h3 className="text-lg font-medium text-slate-900 mb-2 uppercase tracking-wide">
-        深度分析模块
-      </h3>
-      <div className="w-12 h-0.5 bg-slate-300 mb-4" />
-
-      <p className="max-w-[260px] mx-auto text-xs text-slate-500 leading-relaxed font-mono">
-        SYSTEM_STATUS: DEVELOPMENT
-        <br />
-        MODULE: DEEP_ANALYSIS
-        <br />
-        ETA: PENDING...
-      </p>
-
-      <div className="mt-8 flex gap-1">
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="w-1.5 h-1.5 bg-slate-300 animate-pulse rounded-none"
-            style={{ animationDelay: `${i * 0.2}s` }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
-
 export const AISuggestionsPanel = () => {
-  const [activeTab, setActiveTab] = useState<'scan' | 'deep'>('scan');
+  const [activeTab, setActiveTab] = useState<'scan' | 'deep'>('deep');
 
   const tabs = [
-    { id: 'scan', label: 'AI 简历扫描', icon: Sparkles },
+    // { id: 'scan', label: 'AI 简历扫描', icon: Sparkles }, // 暂时隐藏
     { id: 'deep', label: '深度竞争力', icon: Radar },
   ] as const;
 

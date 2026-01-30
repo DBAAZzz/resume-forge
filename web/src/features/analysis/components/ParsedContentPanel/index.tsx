@@ -1,6 +1,6 @@
 import { TiptapEditor } from '@/features/editor';
 
-import { useAnalysisStore } from '../store';
+import { useAnalysisStore } from '../../store';
 
 export const ParsedContentPanel = () => {
   const { parsedContent, aiSuggestions } = useAnalysisStore();
