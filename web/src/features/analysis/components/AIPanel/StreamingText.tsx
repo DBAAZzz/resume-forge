@@ -38,7 +38,7 @@ export const StreamingText = memo(
       };
     }, [text, speed, onComplete]);
 
-    return <p ref={elementRef} className="whitespace-pre-wrap min-h-[1.5em]" />;
+    return <p ref={elementRef} className="min-h-[1.5em] whitespace-pre-wrap" />;
   }
 );
 

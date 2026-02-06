@@ -88,10 +88,10 @@ export const TiptapEditor = ({
   return (
     <div className="flex flex-col gap-2">
       {editable && editor && onSuggestionsChange && (
-        <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-700 pb-2 mb-2">
+        <div className="mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 dark:border-gray-700">
           <button
             onClick={() => editor.chain().focus().insertTag({ label: 'Skill' }).run()}
-            className="px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors"
+            className="rounded-md bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-100"
           >
             Insert Skill Tag
           </button>
@@ -103,7 +103,7 @@ export const TiptapEditor = ({
                 score: 85,
               })
             }
-            className="px-3 py-1.5 text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 rounded-md transition-colors"
+            className="rounded-md bg-green-50 px-3 py-1.5 text-sm font-medium text-green-600 transition-colors hover:bg-green-100"
           >
             Test Analysis
           </button>

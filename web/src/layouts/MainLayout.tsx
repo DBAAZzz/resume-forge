@@ -12,30 +12,28 @@ import {
 
 const navItems = [
   { path: '/', label: '首页' },
-  { path: '/resume', label: '我的简历' },
   { path: '/analysis', label: '简历分析' },
-  { path: '/discover', label: '发现' },
 ];
 
 export default function MainLayout() {
   const { data: currentUser, isLoading } = useCurrentUser();
 
   return (
-    <div className="h-screen w-full bg-white text-black font-sans selection:bg-black selection:text-white flex flex-col overflow-hidden">
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-white font-sans text-black selection:bg-black selection:text-white">
       <motion.nav
         variants={slideDownVariants}
         initial="initial"
         animate="animate"
-        className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200 h-16"
+        className="fixed left-0 right-0 top-0 z-50 h-16 border-b border-gray-200 bg-white/90 backdrop-blur-sm"
       >
-        <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+        <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
           {/* Left Side - Logo */}
           <motion.div
             variants={fadeInVariants}
             initial="initial"
             animate="animate"
             transition={{ delay: 0.2 }}
-            className="font-bold text-xl tracking-tighter"
+            className="text-xl font-bold tracking-tighter"
           >
             RESUME<span className="text-gray-400">FORGE</span>
           </motion.div>
@@ -46,7 +44,7 @@ export default function MainLayout() {
               variants={containerVariants}
               initial="initial"
               animate="animate"
-              className="hidden md:flex items-center space-x-6"
+              className="hidden items-center space-x-6 md:flex"
             >
               {navItems.map((item) => (
                 <NavLink
@@ -77,17 +75,17 @@ export default function MainLayout() {
               className="flex items-center space-x-4"
             >
               {isLoading ? (
-                <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
+                <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200" />
               ) : currentUser ? (
                 <div className="flex items-center space-x-3">
-                  <div className="text-right hidden sm:block">
+                  <div className="hidden text-right sm:block">
                     <p className="text-sm font-bold">{currentUser.name}</p>
                     <p className="text-xs text-gray-500">{currentUser.title}</p>
                   </div>
                   <img
                     src={currentUser.avatar}
                     alt={currentUser.name}
-                    className="w-8 h-8 rounded-full border border-gray-200"
+                    className="h-8 w-8 rounded-full border border-gray-200"
                   />
                 </div>
               ) : null}
@@ -97,8 +95,8 @@ export default function MainLayout() {
       </motion.nav>
 
       {/* Scrollable Content Area */}
-      <div className={`flex-1 flex w-full pt-16 overflow-hidden flex flex-col}`}>
-        <main className={`w-full flex-1 mx-auto h-full flex-1 flex flex-col`}>
+      <div className="flex min-h-0 w-full flex-1 flex-col pt-16">
+        <main className="mx-auto flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
           <Outlet />
         </main>
       </div>

@@ -52,7 +52,7 @@ export const AnalysisUpload = () => {
       animate="animate"
       className="w-full max-w-2xl px-4"
     >
-      <motion.div variants={itemVariants} className="text-center mb-12">
+      <motion.div variants={itemVariants} className="mb-12 text-center">
         <Typography variant="h1" className="text-display mb-4">
           Upload Resume
         </Typography>
@@ -70,10 +70,10 @@ export const AnalysisUpload = () => {
             backgroundColor: isDragging ? 'var(--secondary)' : 'transparent',
           }}
           className={`
-            relative group cursor-pointer
-            h-64 rounded-3xl border-2 border-dashed transition-colors duration-300
-            flex flex-col items-center justify-center
-            bg-card/30 backdrop-blur-sm
+            group relative flex
+            h-64 cursor-pointer flex-col items-center justify-center rounded-3xl
+            border-2 border-dashed bg-card/30 backdrop-blur-sm
+            transition-colors duration-300
           `}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -89,12 +89,12 @@ export const AnalysisUpload = () => {
             disabled={isAnalyzing}
           />
 
-          <div className="flex flex-col items-center space-y-4 text-center p-6">
-            <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+          <div className="flex flex-col items-center space-y-4 p-6 text-center">
+            <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-secondary transition-transform duration-300 group-hover:scale-110">
               {file ? (
-                <Check className="w-8 h-8 text-primary" />
+                <Check className="h-8 w-8 text-primary" />
               ) : (
-                <Upload className="w-8 h-8 text-muted-foreground group-hover:text-primary transition-colors" />
+                <Upload className="h-8 w-8 text-muted-foreground transition-colors group-hover:text-primary" />
               )}
             </div>
 
@@ -129,7 +129,7 @@ export const AnalysisUpload = () => {
               </Transition>
 
               {!file && (
-                <Typography variant="small" className="text-muted-foreground block">
+                <Typography variant="small" className="block text-muted-foreground">
                   Click to browse or drag and drop
                 </Typography>
               )}

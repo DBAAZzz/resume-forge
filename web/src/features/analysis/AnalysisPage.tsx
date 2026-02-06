@@ -11,7 +11,7 @@ const AnalysisPage = () => {
 
   return (
     <AnimatedPage
-      className={`page-container ${showDashboard ? 'p-0 max-w-none h-full' : 'flex flex-col items-center justify-center min-h-[80vh]'}`}
+      className={`page-container ${showDashboard ? 'h-full max-w-none p-0' : 'flex min-h-[80vh] flex-col items-center justify-center'}`}
     >
       {showDashboard ? <AnalysisDashboard /> : <AnalysisUpload />}
     </AnimatedPage>

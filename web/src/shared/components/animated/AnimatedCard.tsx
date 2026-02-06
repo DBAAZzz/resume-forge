@@ -17,7 +17,7 @@ export function AnimatedCard({ children, className = '' }: AnimatedCardProps) {
       animate="animate"
       exit="exit"
       whileHover={{ scale: 1.02 }}
-      className={`bg-card rounded-xl shadow-sm border border-border p-6 ${className}`}
+      className={`rounded-xl border border-border bg-card p-6 shadow-sm ${className}`}
     >
       {children}
     </motion.div>

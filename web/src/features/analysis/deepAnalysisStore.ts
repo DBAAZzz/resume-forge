@@ -25,7 +25,7 @@ interface DeepAnalysisState {
 
 export const useDeepAnalysisStore = create<DeepAnalysisState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       deepInsights: {
         timelineIssues: [],
         skillIssues: [],

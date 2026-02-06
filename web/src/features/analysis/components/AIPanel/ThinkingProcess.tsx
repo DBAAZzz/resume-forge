@@ -27,39 +27,39 @@ export const ThinkingProcess = ({ content = '', isAnalyzing, className }: Thinki
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       className={cn(
-        'w-full overflow-hidden border border-indigo-100 bg-white/80 backdrop-blur-sm shadow-sm transition-all duration-300',
-        isAnalyzing ? 'shadow-indigo-500/10 border-indigo-200' : 'border-gray-200',
+        'w-full overflow-hidden border border-indigo-100 bg-white/80 shadow-sm backdrop-blur-sm transition-all duration-300',
+        isAnalyzing ? 'border-indigo-200 shadow-indigo-500/10' : 'border-gray-200',
         className
       )}
     >
       {/* Header Section */}
       <div
         onClick={() => setIsExpanded(!isExpanded)}
-        className="flex items-center justify-between px-4 py-3 bg-slate-50/50 cursor-pointer hover:bg-slate-50 transition-colors border-b border-gray-100/50"
+        className="flex cursor-pointer items-center justify-between border-b border-gray-100/50 bg-slate-50/50 px-4 py-3 transition-colors hover:bg-slate-50"
       >
         <div className="flex items-center gap-2.5">
           <div
             className={cn(
-              'p-1.5 rounded-lg transition-colors',
+              'rounded-lg p-1.5 transition-colors',
               isAnalyzing ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-500'
             )}
           >
             {isAnalyzing ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <Brain className="w-4 h-4" />
+              <Brain className="h-4 w-4" />
             )}
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold text-gray-800 font-display">AI 思考</span>
-            <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">
+            <span className="font-display text-sm font-semibold text-gray-800">AI 思考</span>
+            <span className="text-[10px] font-medium uppercase tracking-wider text-gray-500">
               {isAnalyzing ? 'Processing Data...' : 'Analysis Complete'}
             </span>
           </div>
         </div>
 
-        <button className="text-gray-400 hover:text-gray-600 transition-colors">
-          {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+        <button className="text-gray-400 transition-colors hover:text-gray-600">
+          {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </button>
       </div>
 
@@ -70,18 +70,18 @@ export const ThinkingProcess = ({ content = '', isAnalyzing, className }: Thinki
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         className="overflow-hidden"
       >
-        <div className="p-4 pr-0 bg-slate-50/30">
+        <div className="bg-slate-50/30 p-4 pr-0">
           <div
             ref={contentRef}
-            className="font-mono text-xs md:text-sm text-gray-600 leading-relaxed whitespace-pre-wrap max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar"
+            className="custom-scrollbar max-h-[50vh] overflow-y-auto whitespace-pre-wrap pr-2 font-mono text-xs leading-relaxed text-gray-600 md:text-sm"
           >
             {content || (
-              <span className="text-gray-400 italic">
+              <span className="italic text-gray-400">
                 Initializing deep learning reasoning chain...
               </span>
             )}
             {isAnalyzing && (
-              <span className="inline-block w-1.5 h-3 ml-1 bg-indigo-500 animate-pulse align-middle" />
+              <span className="ml-1 inline-block h-3 w-1.5 animate-pulse bg-indigo-500 align-middle" />
             )}
           </div>
         </div>

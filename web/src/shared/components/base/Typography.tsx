@@ -6,17 +6,17 @@ import { cn } from '@/shared/utils/classnames';
 const typographyVariants = cva('text-foreground', {
   variants: {
     variant: {
-      h1: 'scroll-m-20 text-4xl font-semibold tracking-tight lg:text-5xl font-display text-foreground',
-      h2: 'scroll-m-20 border-b pb-2 text-3xl font-medium tracking-tight first:mt-0 font-display',
-      h3: 'scroll-m-20 text-2xl font-medium tracking-tight font-display',
-      h4: 'scroll-m-20 text-xl font-medium tracking-tight font-display',
-      p: 'leading-7 [&:not(:first-child)]:mt-6 font-sans text-muted-foreground',
-      blockquote: 'mt-6 border-l-2 border-border pl-6 italic font-sans',
-      list: 'my-6 ml-6 list-disc [&>li]:mt-2 font-sans',
-      lead: 'text-xl text-muted-foreground font-sans',
-      large: 'text-lg font-semibold font-sans',
-      small: 'text-sm font-medium leading-none font-mono opacity-80',
-      muted: 'text-sm text-muted-foreground font-mono',
+      h1: 'scroll-m-20 font-display text-4xl font-semibold tracking-tight text-foreground lg:text-5xl',
+      h2: 'scroll-m-20 border-b pb-2 font-display text-3xl font-medium tracking-tight first:mt-0',
+      h3: 'scroll-m-20 font-display text-2xl font-medium tracking-tight',
+      h4: 'scroll-m-20 font-display text-xl font-medium tracking-tight',
+      p: 'font-sans leading-7 text-muted-foreground [&:not(:first-child)]:mt-6',
+      blockquote: 'mt-6 border-l-2 border-border pl-6 font-sans italic',
+      list: 'my-6 ml-6 list-disc font-sans [&>li]:mt-2',
+      lead: 'font-sans text-xl text-muted-foreground',
+      large: 'font-sans text-lg font-semibold',
+      small: 'font-mono text-sm font-medium leading-none opacity-80',
+      muted: 'font-mono text-sm text-muted-foreground',
     },
   },
   defaultVariants: {

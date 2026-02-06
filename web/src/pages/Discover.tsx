@@ -40,13 +40,13 @@ const Discover = () => {
               variants={itemVariants}
               whileHover={listItemHover}
               whileTap={{ scale: 0.98 }}
-              className="flex items-center justify-between p-6 border-b border-border transition-colors cursor-pointer group hover:bg-secondary/20 rounded-md"
+              className="group flex cursor-pointer items-center justify-between rounded-md border-b border-border p-6 transition-colors hover:bg-secondary/20"
             >
               <Typography variant="h4" className="font-medium">
                 Opportunity {i}
               </Typography>
               <motion.span
-                className="mono text-xs text-muted-foreground group-hover:text-primary transition-colors"
+                className="mono text-xs text-muted-foreground transition-colors group-hover:text-primary"
                 whileHover={linkTextHover}
               >
                 READ MORE -&gt;

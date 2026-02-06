@@ -48,17 +48,17 @@ const AnimationDemo = () => {
           </motion.div>
         </section>
 
-        <section className="space-y-6 mt-12">
+        <section className="mt-12 space-y-6">
           <motion.h2 variants={itemVariants} className="text-2xl font-bold">
             Cards
           </motion.h2>
           <motion.div
             variants={containerVariants}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            className="grid grid-cols-1 gap-6 md:grid-cols-3"
           >
             {[1, 2, 3].map((i) => (
               <AnimatedCard key={i}>
-                <h3 className="text-xl font-bold mb-2">Card {i}</h3>
+                <h3 className="mb-2 text-xl font-bold">Card {i}</h3>
                 <p className="text-gray-600">
                   This is an animated card with hover effects and staggered entrance.
                 </p>
@@ -67,13 +67,13 @@ const AnimationDemo = () => {
           </motion.div>
         </section>
 
-        <section className="space-y-6 mt-12">
+        <section className="mt-12 space-y-6">
           <motion.h2 variants={itemVariants} className="text-2xl font-bold">
             Interactive Elements
           </motion.h2>
           <div className="flex gap-8">
             <motion.div
-              className="w-24 h-24 bg-blue-500 rounded-xl cursor-pointer flex items-center justify-center text-white font-bold"
+              className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-xl bg-blue-500 font-bold text-white"
               whileHover={{ scale: 1.1, rotate: 10 }}
               whileTap={{ scale: 0.9 }}
             >
@@ -81,7 +81,7 @@ const AnimationDemo = () => {
             </motion.div>
 
             <motion.div
-              className="w-24 h-24 bg-purple-500 rounded-full cursor-pointer flex items-center justify-center text-white font-bold"
+              className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-purple-500 font-bold text-white"
               variants={pulseVariants}
               animate="animate"
             >

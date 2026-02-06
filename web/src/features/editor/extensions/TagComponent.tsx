@@ -41,8 +41,8 @@ const TagComponent = (props: NodeViewProps) => {
   const TagContent = (
     <span
       className={`
-          inline-flex items-center font-medium
-          transition-colors duration-200 select-none cursor-pointer
+          inline-flex cursor-pointer select-none
+          items-center font-medium transition-colors duration-200
           ${getTypeStyles()}
         `}
       data-id={node.attrs.id as string}

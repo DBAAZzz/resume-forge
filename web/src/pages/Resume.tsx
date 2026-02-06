@@ -17,7 +17,7 @@ const Resume = () => {
 
   return (
     <AnimatedPage>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+      <div className="mb-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
         <motion.div variants={fadeInLeftVariants} className="space-y-2">
           <MotionTypography variant="h1" className="text-4xl tracking-tight">
             My Resumes
@@ -28,7 +28,7 @@ const Resume = () => {
         </motion.div>
 
         <div className="flex items-center gap-4">
-          <div className="bg-secondary/50 p-1 rounded-lg flex items-center gap-1">
+          <div className="flex items-center gap-1 rounded-lg bg-secondary/50 p-1">
             <Button
               variant={viewMode === 'grid' ? 'glass' : 'ghost'}
               size="icon"
@@ -95,16 +95,16 @@ const Resume = () => {
         {resumes.map((resume) => (
           <AnimatedCard
             key={resume.id}
-            className="group relative overflow-hidden bg-white/50 border-input hover:border-primary/50 transition-colors"
+            className="group relative overflow-hidden border-input bg-white/50 transition-colors hover:border-primary/50"
           >
             <div
               className={`flex ${viewMode === 'list' ? 'flex-row items-center gap-6' : 'flex-col'}`}
             >
               <div
-                className={`flex justify-between items-start ${viewMode === 'list' ? 'order-2 ml-auto flex-col items-end gap-2' : 'mb-4 w-full'}`}
+                className={`flex items-start justify-between ${viewMode === 'list' ? 'order-2 ml-auto flex-col items-end gap-2' : 'mb-4 w-full'}`}
               >
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                  className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${
                     resume.status === 'published'
                       ? 'bg-green-100 text-green-700'
                       : 'bg-secondary text-secondary-foreground'
@@ -112,7 +112,7 @@ const Resume = () => {
                 >
                   {resume.status}
                 </span>
-                <span className="text-sm text-muted-foreground font-mono">
+                <span className="font-mono text-sm text-muted-foreground">
                   Score: {resume.completionScore}%
                 </span>
               </div>
@@ -120,22 +120,22 @@ const Resume = () => {
               <div className={`${viewMode === 'list' ? 'flex-1' : 'w-full'} space-y-2`}>
                 <Typography
                   variant="h3"
-                  className="mb-2 group-hover:text-primary transition-colors text-lg"
+                  className="mb-2 text-lg transition-colors group-hover:text-primary"
                 >
                   {resume.title}
                 </Typography>
                 <Typography
                   variant="p"
-                  className="text-muted-foreground line-clamp-2 text-sm leading-relaxed mb-6"
+                  className="mb-6 line-clamp-2 text-sm leading-relaxed text-muted-foreground"
                 >
                   {resume.summary}
                 </Typography>
 
                 <div
-                  className={`flex items-center text-sm text-muted-foreground ${viewMode === 'grid' ? 'justify-between border-t border-border pt-4 mt-auto' : 'gap-4'}`}
+                  className={`flex items-center text-sm text-muted-foreground ${viewMode === 'grid' ? 'mt-auto justify-between border-t border-border pt-4' : 'gap-4'}`}
                 >
                   <span className="font-mono text-xs">Updated: {resume.lastUpdated}</span>
-                  <Button variant="link" className="ml-auto p-0 h-auto">
+                  <Button variant="link" className="ml-auto h-auto p-0">
                     Edit &rarr;
                   </Button>
                 </div>

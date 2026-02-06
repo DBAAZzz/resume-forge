@@ -32,7 +32,7 @@ export function AnimatedButton({
     <motion.button
       whileHover={disabled ? undefined : buttonHover}
       whileTap={disabled ? undefined : buttonTap}
-      className={`${baseStyles} ${variantStyles[finalVariant]} ${className} ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}
+      className={`${baseStyles} ${variantStyles[finalVariant]} ${className} ${disabled ? 'pointer-events-none cursor-not-allowed opacity-50' : ''}`}
       {...props}
     >
       {children}

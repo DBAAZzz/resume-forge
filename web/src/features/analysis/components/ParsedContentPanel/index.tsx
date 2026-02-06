@@ -6,8 +6,8 @@ export const ParsedContentPanel = () => {
   const { parsedContent, aiSuggestions } = useAnalysisStore();
 
   return (
-    <div className="h-full overflow-y-auto p-8 border-r border-border bg-card/20 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-      <div className="max-w-prose mx-auto">
+    <div className="h-full overflow-y-auto bg-card/20 p-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="mx-auto max-w-prose">
         <TiptapEditor
           content={parsedContent || '<p>No content available</p>'}
           className="min-h-[200px]"

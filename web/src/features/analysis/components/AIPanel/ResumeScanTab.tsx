@@ -26,15 +26,15 @@ export const ResumeScanTab = memo(() => {
     !thinkingText;
 
   return (
-    <div className="h-full overflow-y-auto p-4 sm:p-6 bg-slate-50/50 custom-scrollbar">
+    <div className="custom-scrollbar h-full overflow-y-auto bg-slate-50/50 p-4 sm:p-6">
       <div className="flex flex-col gap-6 pb-10">
         {showStartButton ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center justify-center py-20 gap-6"
+            className="flex flex-col items-center justify-center gap-6 py-20"
           >
-            <div className="space-y-2 text-center max-w-md">
+            <div className="max-w-md space-y-2 text-center">
               <Typography variant="h3" className="font-display font-semibold text-gray-900">
                 AI Deep Analysis
               </Typography>
@@ -46,10 +46,10 @@ export const ResumeScanTab = memo(() => {
 
             <button
               onClick={() => startAnalysis()}
-              className="bg-primary text-primary-foreground px-6 py-3 rounded-full font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
+              className="flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground transition-opacity hover:opacity-90"
             >
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-              <Sparkles className="w-4 h-4" />
+              <div className="absolute inset-0 translate-y-full bg-white/20 transition-transform duration-300 group-hover:translate-y-0" />
+              <Sparkles className="h-4 w-4" />
               <span>开始简历分析</span>
             </button>
           </motion.div>

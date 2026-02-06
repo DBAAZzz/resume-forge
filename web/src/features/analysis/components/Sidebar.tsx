@@ -34,13 +34,13 @@ const SidebarItem = memo(({ icon: Icon, label, onClick, active }: SidebarItemPro
         whileTap={{ scale: 0.95 }}
         onClick={onClick}
         className={cn(
-          'relative flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300 outline-none',
+          'relative flex h-12 w-12 items-center justify-center rounded-2xl outline-none transition-all duration-300',
           active
             ? 'bg-black text-white shadow-xl shadow-black/20 ring-2 ring-black ring-offset-2'
-            : 'text-gray-400 hover:text-black hover:bg-gray-100/80 focus:bg-gray-100/80'
+            : 'text-gray-400 hover:bg-gray-100/80 hover:text-black focus:bg-gray-100/80'
         )}
       >
-        <Icon className="w-5 h-5" strokeWidth={active ? 2.5 : 2} />
+        <Icon className="h-5 w-5" strokeWidth={active ? 2.5 : 2} />
       </motion.button>
 
       {/* Headless UI Transition for Tooltip */}
@@ -54,8 +54,8 @@ const SidebarItem = memo(({ icon: Icon, label, onClick, active }: SidebarItemPro
         leaveFrom="opacity-100 translate-x-0"
         leaveTo="opacity-0 translate-x-2"
       >
-        <div className="absolute left-14 z-50 pointer-events-none">
-          <div className="relative px-3 py-1.5 bg-black text-white text-xs font-medium rounded-lg shadow-xl whitespace-nowrap">
+        <div className="pointer-events-none absolute left-14 z-50">
+          <div className="relative whitespace-nowrap rounded-lg bg-black px-3 py-1.5 text-xs font-medium text-white shadow-xl">
             {label}
             <span className="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 border-4 border-transparent border-r-black" />
           </div>
@@ -77,13 +77,13 @@ const SettingsMenu = memo(() => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className={cn(
-              'flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300 outline-none',
+              'flex h-12 w-12 items-center justify-center rounded-2xl outline-none transition-all duration-300',
               open
                 ? 'bg-gray-100 text-black'
-                : 'text-gray-400 hover:text-black hover:bg-gray-100/80'
+                : 'text-gray-400 hover:bg-gray-100/80 hover:text-black'
             )}
           >
-            <Settings className="w-5 h-5" strokeWidth={2} />
+            <Settings className="h-5 w-5" strokeWidth={2} />
           </Menu.Button>
 
           <Transition
@@ -95,9 +95,9 @@ const SettingsMenu = memo(() => {
             leaveFrom="transform opacity-100 scale-100 translate-x-0"
             leaveTo="transform opacity-0 scale-95 translate-x-2"
           >
-            <Menu.Items className="absolute left-14 bottom-0 w-48 origin-bottom-left bg-white rounded-xl shadow-xl ring-1 ring-black/5 focus:outline-none p-1.5 space-y-1 z-50">
-              <div className="px-2 py-2 mb-1 border-b border-gray-100">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <Menu.Items className="absolute bottom-0 left-14 z-50 w-48 origin-bottom-left space-y-1 rounded-xl bg-white p-1.5 shadow-xl ring-1 ring-black/5 focus:outline-none">
+              <div className="mb-1 border-b border-gray-100 px-2 py-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                   Settings
                 </p>
               </div>
@@ -166,7 +166,7 @@ export const DashboardSidebar = memo(() => {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="w-20 h-full border-r border-gray-100 bg-white/80 backdrop-blur-xl flex flex-col items-center py-8 z-40"
+      className="z-40 flex h-full w-20 flex-col items-center border-r border-gray-100 bg-white/80 py-8 backdrop-blur-xl"
     >
       <div className="flex flex-col gap-6">
         <SidebarItem icon={Sparkles} label="AI Analysis" active onClick={() => {}} />

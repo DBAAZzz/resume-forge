@@ -17,7 +17,7 @@ export function AnimatedLoader({ size = 'md', className = '' }: AnimatedLoaderPr
   return (
     <div className={`flex items-center justify-center ${className}`}>
       <motion.div
-        className={`${sizes[size]} border-2 border-gray-200 border-t-black rounded-full`}
+        className={`${sizes[size]} rounded-full border-2 border-gray-200 border-t-black`}
         variants={spinnerVariants}
         animate="animate"
       />

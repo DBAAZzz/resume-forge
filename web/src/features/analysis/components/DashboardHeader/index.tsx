@@ -34,52 +34,52 @@ export const DashboardHeader = () => {
   const score = useAnalysisStore((state) => state.aiSuggestions.score);
 
   return (
-    <div className="flex items-center justify-between px-6 py-3 border-b border-border bg-background/50 backdrop-blur-sm z-10 relative">
-      <div className="flex items-center gap-8 flex-1">
+    <div className="relative z-10 flex items-center justify-between border-b border-border bg-background/50 px-6 py-3 backdrop-blur-sm">
+      <div className="flex flex-1 items-center gap-8">
         {/* Role Section */}
-        <div className="flex flex-col gap-1 min-w-[200px]">
-          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+        <div className="flex min-w-[200px] flex-col gap-1">
+          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             面试岗位
           </span>
-          <div className="flex items-center gap-2 group">
+          <div className="group flex items-center gap-2">
             <input
               type="text"
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="bg-transparent text-xl font-bold text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50 rounded px-1 -ml-1 w-full max-w-[300px] hover:bg-white/5 transition-colors"
+              className="-ml-1 w-full max-w-[300px] rounded bg-transparent px-1 text-xl font-bold text-foreground transition-colors hover:bg-white/5 focus:outline-none focus:ring-1 focus:ring-primary/50"
             />
-            <Pencil className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-50 transition-opacity" />
+            <Pencil className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-50" />
           </div>
         </div>
 
-        <div className="h-10 w-[1px] bg-border shrink-0" />
+        <div className="h-10 w-[1px] shrink-0 bg-border" />
 
         {/* JD Description Section */}
-        <div className="flex items-center gap-3 text-muted-foreground flex-1">
-          <Building2 className="w-5 h-5 shrink-0" />
+        <div className="flex flex-1 items-center gap-3 text-muted-foreground">
+          <Building2 className="h-5 w-5 shrink-0" />
           <input
             type="text"
             value={jdDescription}
             onChange={(e) => setJdDescription(e.target.value)}
-            className="bg-transparent text-sm w-full focus:outline-none focus:ring-1 focus:ring-primary/50 rounded px-1 hover:text-foreground transition-colors hover:bg-white/5 placeholder:text-muted-foreground/50"
+            className="w-full rounded bg-transparent px-1 text-sm transition-colors placeholder:text-muted-foreground/50 hover:bg-white/5 hover:text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50"
             placeholder="输入职位描述或公司..."
           />
         </div>
       </div>
 
       {/* Score Section */}
-      <div className="flex items-center gap-4 shrink-0 border-l border-border pl-8 ml-4">
+      <div className="ml-4 flex shrink-0 items-center gap-4 border-l border-border pl-8">
         <div className="flex flex-col items-end">
-          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             简历评分
           </span>
           <span className={`text-sm font-medium ${getScoreColor(score)}`}>
             {getScoreLabel(score)}
           </span>
         </div>
-        <div className="relative w-12 h-12 flex items-center justify-center">
+        <div className="relative flex h-12 w-12 items-center justify-center">
           {/* Simple Chart SVG */}
-          <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+          <svg className="h-full w-full -rotate-90" viewBox="0 0 36 36">
             {/* Background Circle */}
             <path
               className="text-muted/20"

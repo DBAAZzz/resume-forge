@@ -33,7 +33,7 @@ export const useAnalysisToasts = () => {
           description: item.content
             ? `"${item.content.substring(0, 80)}${item.content.length > 80 ? '...' : ''}"`
             : undefined,
-          icon: <ThumbsUp className="w-4 h-4" />,
+          icon: <ThumbsUp className="h-4 w-4" />,
           duration: 4000,
         });
       });
@@ -55,7 +55,7 @@ export const useAnalysisToasts = () => {
           description: item.content
             ? `"${item.content.substring(0, 80)}${item.content.length > 80 ? '...' : ''}"`
             : undefined,
-          icon: <ThumbsDown className="w-4 h-4" />,
+          icon: <ThumbsDown className="h-4 w-4" />,
           duration: 5000,
         });
       });
