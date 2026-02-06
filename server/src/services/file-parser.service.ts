@@ -2,8 +2,8 @@ import mammoth from 'mammoth';
 import { PDFParse } from 'pdf-parse';
 import * as XLSX from 'xlsx';
 
-import { fileParserConfig, getFileCategory } from '@/config/file-parser.config.js';
-import type { FileBuffer, ParsedFileContent } from '@/types/index.js';
+import { fileParserConfig, getFileCategory } from '../config/file-parser.config.js';
+import type { FileBuffer, ParsedFileContent } from '../types/index.js';
 
 /**
  * 通用文件解析服务

@@ -1,7 +1,7 @@
 import { generateText, streamText, Output } from 'ai';
 
-import type { DeepseekRequest, TextDelta, SSEEvent, DeepInsightEvent } from '@/types/index.js';
-import { SSE_TYPE, DEEP_INSIGHT_TYPE } from '@/types/index.js';
+import type { DeepseekRequest, TextDelta, SSEEvent, DeepInsightEvent } from '../types/index.js';
+import { SSE_TYPE, DEEP_INSIGHT_TYPE } from '../types/index.js';
 
 import { models, resumeAnalysisSchema, deepInsightSchema } from './ai/index.js';
 

@@ -1,7 +1,7 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createDeepSeek } from '@ai-sdk/deepseek';
 
-import { config } from '@/config/env.js';
+import { config } from '../../config/env.js';
 
 /**
  * DeepSeek provider using official AI SDK provider

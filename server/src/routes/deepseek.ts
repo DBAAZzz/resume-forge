@@ -3,13 +3,13 @@ import {
   runDeepseekAgentComplete,
   analyzeResumeStructuredStream,
   analyzeResumeDeepInsights,
-} from '@/services/deepseek.service.js';
+} from '../services/deepseek.service.js';
 import {
   extractPromptFromFields,
   parseMultipartFile,
   validateTextFileType,
-} from '@/utils/file.utils.js';
-import { setStreamHeaders } from '@/utils/response.utils.js';
+} from '../utils/file.utils.js';
+import { setStreamHeaders } from '../utils/response.utils.js';
 
 import type { DeepseekRequest, ResumeAnalysisRequest } from '../types/index.js';
 import type { FastifyInstance } from 'fastify';
