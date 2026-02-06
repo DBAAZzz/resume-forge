@@ -1,11 +1,6 @@
 import { Menu, Transition } from '@headlessui/react';
 import { motion } from 'framer-motion';
-import LogOut from 'lucide-react/dist/esm/icons/log-out';
-import Monitor from 'lucide-react/dist/esm/icons/monitor';
-import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw';
-import Settings from 'lucide-react/dist/esm/icons/settings';
-import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import User from 'lucide-react/dist/esm/icons/user';
+import { LogOut, Monitor, RotateCcw, Settings, Sparkles, User } from 'lucide-react';
 import { Fragment, useState, memo } from 'react';
 
 import { cn } from '@/shared/utils/classnames';
