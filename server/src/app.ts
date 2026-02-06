@@ -17,6 +17,12 @@ export const buildApp = async () => {
 
   // Register all routes
   await registerRoutes(app);
+  await app.register(
+    async (apiApp) => {
+      await registerRoutes(apiApp);
+    },
+    { prefix: '/api' }
+  );
 
   return app;
 };

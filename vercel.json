@@ -1,0 +1,20 @@
+{
+  "framework": "vite",
+  "buildCommand": "pnpm --filter @resume/web build",
+  "outputDirectory": "web/dist",
+  "rewrites": [
+    {
+      "source": "/file/(.*)",
+      "destination": "/api/file/$1"
+    },
+    {
+      "source": "/deepseek/(.*)",
+      "destination": "/api/deepseek/$1"
+    }
+  ],
+  "functions": {
+    "api/[...route].ts": {
+      "maxDuration": 60
+    }
+  }
+}
