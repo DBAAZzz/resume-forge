@@ -5,16 +5,16 @@
   "outputDirectory": "web/dist",
   "rewrites": [
     {
-      "source": "/file/(.*)",
-      "destination": "/api/file/$1"
+      "source": "/file/:path*",
+      "destination": "/api/file/:path*"
     },
     {
-      "source": "/deepseek/(.*)",
-      "destination": "/api/deepseek/$1"
+      "source": "/deepseek/:path*",
+      "destination": "/api/deepseek/:path*"
     }
   ],
   "functions": {
-    "api/[...route].ts": {
+    "api/**/*.ts": {
       "maxDuration": 60
     }
   }
