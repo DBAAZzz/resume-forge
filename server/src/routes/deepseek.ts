@@ -1,8 +1,13 @@
+import { decryptDeepseekApiKey } from '../services/crypto.service.js';
 import {
   runDeepseekAgent,
   runDeepseekAgentComplete,
   analyzeResumeStructuredStream,
   analyzeResumeDeepInsights,
+  formatContentHierarchy,
+  formatContentHierarchyStream,
+  optimizeTagCandidates,
+  validateDeepseekApiKey,
 } from '../services/deepseek.service.js';
 import {
   extractPromptFromFields,
@@ -11,7 +16,14 @@ import {
 } from '../utils/file.utils.js';
 import { setStreamHeaders } from '../utils/response.utils.js';
 
-import type { DeepseekRequest, ResumeAnalysisRequest } from '../types/index.js';
+import type {
+  DeepseekRequest,
+  ResumeAnalysisRequest,
+  TagOptimizationRequest,
+  TagOptimizationResponse,
+  DeepseekKeyValidationRequest,
+  ContentHierarchyFormatRequest,
+} from '../types/index.js';
 import type { FastifyInstance } from 'fastify';
 
 export async function deepseekRoutes(app: FastifyInstance) {
@@ -82,19 +94,165 @@ export async function deepseekRoutes(app: FastifyInstance) {
     }
   });
 
+  // Validate API Key endpoint - 校验 DeepSeek Key 是否有效
+  app.post<{ Body: DeepseekKeyValidationRequest }>(
+    '/deepseek/validate-key',
+    async (request, reply) => {
+      const { encryptedApiKey } = request.body;
+
+      if (!encryptedApiKey || typeof encryptedApiKey !== 'string') {
+        reply.code(400);
+        return { error: 'Missing or invalid encryptedApiKey field' };
+      }
+
+      let apiKey: string;
+      try {
+        apiKey = decryptDeepseekApiKey(encryptedApiKey);
+      } catch {
+        reply.code(400);
+        return { error: 'Invalid encryptedApiKey' };
+      }
+
+      const result = await validateDeepseekApiKey(apiKey);
+      return result;
+    }
+  );
+
+  app.post<{ Body: TagOptimizationRequest; Reply: TagOptimizationResponse | { error: string } }>(
+    '/deepseek/optimize-tag-candidates',
+    async (request, reply) => {
+      const { text, reason, context, model, encryptedApiKey, candidateCount } = request.body;
+
+      if (!text || typeof text !== 'string') {
+        reply.code(400);
+        return { error: 'Missing or invalid text field' };
+      }
+
+      let apiKey: string | undefined;
+      if (encryptedApiKey) {
+        try {
+          apiKey = decryptDeepseekApiKey(encryptedApiKey);
+        } catch {
+          reply.code(400);
+          return { error: 'Invalid encryptedApiKey' };
+        }
+      }
+
+      try {
+        const candidates = await optimizeTagCandidates({
+          text,
+          reason,
+          context,
+          candidateCount,
+          model,
+          apiKey,
+        });
+        return { candidates };
+      } catch (err) {
+        request.log.error(err);
+        reply.code(500);
+        return { error: err instanceof Error ? err.message : String(err) };
+      }
+    }
+  );
+
+  // Content formatting endpoint - 对解析后的文本做层次化排版，不修改原文内容
+  app.post<{ Body: ContentHierarchyFormatRequest }>(
+    '/deepseek/format/hierarchy',
+    async (request, reply) => {
+      const { content, model, encryptedApiKey } = request.body;
+
+      if (!content || typeof content !== 'string') {
+        reply.code(400);
+        return { error: 'Missing or invalid content field' };
+      }
+
+      let apiKey: string | undefined;
+      if (encryptedApiKey) {
+        try {
+          apiKey = decryptDeepseekApiKey(encryptedApiKey);
+        } catch {
+          reply.code(400);
+          return { error: 'Invalid encryptedApiKey' };
+        }
+      }
+
+      try {
+        const formattedContent = await formatContentHierarchy(content, model, apiKey);
+        return { content: formattedContent };
+      } catch (err) {
+        request.log.error(err);
+        reply.code(500);
+        return { error: err instanceof Error ? err.message : String(err) };
+      }
+    }
+  );
+
+  // Content formatting streaming endpoint - 对解析后的文本做层次化排版（SSE 流式）
+  app.post<{ Body: ContentHierarchyFormatRequest }>(
+    '/deepseek/format/hierarchy/stream',
+    async (request, reply) => {
+      const { content, model, encryptedApiKey } = request.body;
+
+      if (!content || typeof content !== 'string') {
+        reply.code(400);
+        return { error: 'Missing or invalid content field' };
+      }
+
+      let apiKey: string | undefined;
+      if (encryptedApiKey) {
+        try {
+          apiKey = decryptDeepseekApiKey(encryptedApiKey);
+        } catch {
+          reply.code(400);
+          return { error: 'Invalid encryptedApiKey' };
+        }
+      }
+
+      setStreamHeaders(reply, 'sse');
+
+      try {
+        for await (const event of formatContentHierarchyStream(content, model, apiKey)) {
+          reply.raw.write(`data: ${JSON.stringify(event)}\n\n`);
+        }
+        reply.raw.write('data: [DONE]\n\n');
+      } catch (err) {
+        request.log.error(err);
+        reply.raw.write(
+          `data: ${JSON.stringify({
+            type: 'error',
+            value: err instanceof Error ? err.message : String(err),
+          })}\n\n`
+        );
+      } finally {
+        reply.raw.end();
+      }
+    }
+  );
+
   // Resume analysis endpoint - 分析简历并返回结构化 JSON (Streaming SSE)
   app.post<{ Body: ResumeAnalysisRequest }>('/deepseek/analyze-resume', async (request, reply) => {
-    const { content } = request.body;
+    const { content, model, encryptedApiKey } = request.body;
 
     if (!content || typeof content !== 'string') {
       reply.code(400);
       return { error: 'Missing or invalid content field' };
     }
 
+    let apiKey: string | undefined;
+    if (encryptedApiKey) {
+      try {
+        apiKey = decryptDeepseekApiKey(encryptedApiKey);
+      } catch {
+        reply.code(400);
+        return { error: 'Invalid encryptedApiKey' };
+      }
+    }
+
     setStreamHeaders(reply, 'sse');
 
     try {
-      for await (const event of analyzeResumeStructuredStream(content)) {
+      for await (const event of analyzeResumeStructuredStream(content, model, apiKey)) {
         reply.raw.write(`data: ${JSON.stringify(event)}\n\n`);
       }
       reply.raw.write('data: [DONE]\n\n');
@@ -116,17 +274,33 @@ export async function deepseekRoutes(app: FastifyInstance) {
   app.post<{ Body: ResumeAnalysisRequest }>(
     '/deepseek/analyze/deep-insights',
     async (request, reply) => {
-      const { content } = request.body;
+      const { content, model, encryptedApiKey, targetRole, jobDescription } = request.body;
 
       if (!content || typeof content !== 'string') {
         reply.code(400);
         return { error: 'Missing or invalid content field' };
       }
 
+      let apiKey: string | undefined;
+      if (encryptedApiKey) {
+        try {
+          apiKey = decryptDeepseekApiKey(encryptedApiKey);
+        } catch {
+          reply.code(400);
+          return { error: 'Invalid encryptedApiKey' };
+        }
+      }
+
       setStreamHeaders(reply, 'sse');
 
       try {
-        for await (const event of analyzeResumeDeepInsights(content)) {
+        for await (const event of analyzeResumeDeepInsights(
+          content,
+          model,
+          apiKey,
+          targetRole,
+          jobDescription
+        )) {
           reply.raw.write(`data: ${JSON.stringify(event)}\n\n`);
         }
         reply.raw.write('data: [DONE]\n\n');

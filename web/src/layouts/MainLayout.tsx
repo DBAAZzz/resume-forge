@@ -33,9 +33,17 @@ export default function MainLayout() {
             initial="initial"
             animate="animate"
             transition={{ delay: 0.2 }}
-            className="text-xl font-bold tracking-tighter"
+            className="cursor-pointer text-xl font-bold tracking-tighter"
           >
-            RESUME<span className="text-gray-400">FORGE</span>
+            <NavLink to="/">
+              <motion.span
+                variants={itemVariants}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                RESUME<span className="text-gray-400">FORGE</span>
+              </motion.span>
+            </NavLink>
           </motion.div>
 
           {/* Right Side - Navigation and User Profile */}

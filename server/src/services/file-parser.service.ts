@@ -3,6 +3,7 @@ import { PDFParse } from 'pdf-parse';
 import * as XLSX from 'xlsx';
 
 import { fileParserConfig, getFileCategory } from '../config/file-parser.config.js';
+
 import type { FileBuffer, ParsedFileContent } from '../types/index.js';
 
 /**
@@ -75,9 +76,17 @@ export class FileParserService {
     fileName: string,
     mimeType: string
   ): Promise<ParsedFileContent> {
+    const parser = new PDFParse({ data: buffer });
+
     try {
-      const data = new PDFParse(buffer);
-      const content = (await data.getText()).text;
+      const rawContent = (
+        await parser.getText({
+          // 禁用默认 "-- page_number of total_number --" 页分隔文案
+          pageJoiner: '\n\n',
+          lineEnforce: true,
+        })
+      ).text;
+      const content = this.normalizePdfExtractedText(rawContent);
       const wordCount = this.countWords(content);
 
       return {
@@ -94,7 +103,103 @@ export class FileParserService {
       throw new Error(
         `Failed to parse PDF: ${error instanceof Error ? error.message : String(error)}`
       );
+    } finally {
+      await parser.destroy();
     }
+  }
+
+  /**
+   * PDF 提取文本归一化：
+   * 1) 清理页分隔占位符
+   * 2) 识别软换行并合并
+   * 3) 保留有语义的换行（标题、列表、句末停顿）
+   */
+  private normalizePdfExtractedText(text: string): string {
+    const normalized = text.replace(/\r\n/g, '\n');
+    const removedPageMarker = normalized.replace(
+      /(?:^|\n)\s*--\s*\d+\s*of\s*\d+\s*--\s*(?=\n|$)/gi,
+      '\n'
+    );
+
+    const merged = this.mergePdfSoftLineBreaks(removedPageMarker);
+    return merged.replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  /**
+   * 将仅因版式导致的换行（soft wrap）合并，
+   * 保留段落、标题、列表等结构换行
+   */
+  private mergePdfSoftLineBreaks(text: string): string {
+    const lines = text.split('\n').map((line) => line.replace(/[ \t]+$/g, ''));
+    const output: string[] = [];
+
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+
+      // 空行作为段落分隔保留
+      if (!line) {
+        if (output[output.length - 1] !== '') {
+          output.push('');
+        }
+        continue;
+      }
+
+      if (output.length === 0 || output[output.length - 1] === '') {
+        output.push(line);
+        continue;
+      }
+
+      const previous = output[output.length - 1];
+      if (this.shouldMergePdfLines(previous, line)) {
+        output[output.length - 1] = this.joinPdfLines(previous, line);
+      } else {
+        output.push(line);
+      }
+    }
+
+    return output.join('\n');
+  }
+
+  /**
+   * 判断两行是否属于同一语义句子/段落
+   */
+  private shouldMergePdfLines(previous: string, next: string): boolean {
+    const prev = previous.trim();
+    const nextLine = next.trim();
+
+    // 句末停顿符号后通常换段/换行
+    if (/[。！？!?；;：:]$/.test(prev)) return false;
+
+    // 标题或列表项应保留换行
+    if (this.isLikelyHeading(prev) || this.isListLikeLine(nextLine)) return false;
+
+    return true;
+  }
+
+  private isListLikeLine(line: string): boolean {
+    return /^(?:[-*•●▪■▸▹]\s+|\d+[.)]\s+|[（(]?\d+[）)]\s+|[A-Za-z][.)]\s+)/.test(line);
+  }
+
+  private isLikelyHeading(line: string): boolean {
+    const text = line.trim();
+
+    if (!text || text.length > 24) return false;
+    if (/[。！？!?；;，,]/.test(text)) return false;
+    if (this.isListLikeLine(text)) return false;
+
+    if (/^[A-Z][A-Z\s/&-]{1,24}$/.test(text)) return true;
+    return /(经历|背景|技能|项目|教育|信息|总结|简介|奖项|证书|能力|实习|工作)$/.test(text);
+  }
+
+  private joinPdfLines(previous: string, next: string): string {
+    // 英文断词连字符跨行：`develop-` + `ment` -> `development`
+    if (/-$/.test(previous) && /^[A-Za-z]/.test(next)) {
+      return `${previous.slice(0, -1)}${next}`;
+    }
+
+    // 英文/数字连续文本补空格，中文连续文本不补空格
+    const needsSpace = /[A-Za-z0-9)]$/.test(previous) && /^[A-Za-z0-9(]/.test(next);
+    return needsSpace ? `${previous} ${next}` : `${previous}${next}`;
   }
 
   /**

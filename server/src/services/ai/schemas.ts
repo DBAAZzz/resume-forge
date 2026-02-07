@@ -1,22 +1,17 @@
 import { z } from 'zod';
 
 /**
- * Schema for a single analysis item (strength or weakness paragraph)
+ * Schema for a single weakness item paragraph
  */
 export const analysisItemSchema = z.object({
   paragraphIndex: z.number().describe('The paragraph index from the input'),
-  reason: z.string().describe('Explanation of why this paragraph is strength or weakness'),
+  reason: z.string().describe('Explanation of why this paragraph is weak'),
 });
 
 /**
  * Schema for LLM resume analysis response
  */
 export const resumeAnalysisSchema = z.object({
-  strength: z
-    .array(analysisItemSchema)
-    .describe(
-      'Paragraphs with strength content (specific data, quantified results, concrete examples)'
-    ),
   weakness: z
     .array(analysisItemSchema)
     .describe('Paragraphs with weak content (vague, lacking data, unclear)'),
@@ -66,6 +61,27 @@ export const metricSuggestionSchema = z.object({
 });
 
 /**
+ * Schema for role-job match insight
+ */
+export const jobMatchSchema = z.object({
+  score: z
+    .number()
+    .min(0)
+    .max(100)
+    .describe('Job match score between resume and JD, from 0 to 100'),
+  summary: z.string().describe('One concise summary of current fit for the target role'),
+  matchedRequirements: z
+    .array(z.string())
+    .describe('JD requirements that are already well covered by the resume'),
+  missingRequirements: z
+    .array(z.string())
+    .describe('JD requirements that are weak or missing in the resume'),
+  recommendations: z
+    .array(z.string())
+    .describe('Specific suggestions to improve match for this target role'),
+});
+
+/**
  * Schema for deep resume insights (logic audit + metric mining)
  */
 export const deepInsightSchema = z.object({
@@ -78,6 +94,7 @@ export const deepInsightSchema = z.object({
   metricSuggestions: z
     .array(metricSuggestionSchema)
     .describe('Suggestions for quantifying achievements that lack metrics'),
+  jobMatch: jobMatchSchema.describe('Overall job-role matching insight against the provided JD'),
   overallSuggestion: z.string().describe('Overall suggestion for improving the resume'),
 });
 

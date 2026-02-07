@@ -7,5 +7,6 @@ export {
   timelineIssueSchema,
   skillIssueSchema,
   metricSuggestionSchema,
+  jobMatchSchema,
   type DeepInsightSchemaType,
 } from './schemas.js';

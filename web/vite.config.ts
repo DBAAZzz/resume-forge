@@ -16,6 +16,7 @@ export default defineConfig({
       '/api': 'http://localhost:3000',
       '/file': 'http://localhost:3000',
       '/deepseek': 'http://localhost:3000',
+      '/crypto': 'http://localhost:3000',
     },
   },
 });

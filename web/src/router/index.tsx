@@ -8,7 +8,7 @@ import { AnimatedLoader } from '@/shared/components/animated';
 const Home = lazy(() => import('@/pages/Home'));
 const Resume = lazy(() => import('@/pages/Resume'));
 const AnalysisPage = lazy(() =>
-  import('@/features/analysis').then((m) => ({ default: m.AnalysisPage }))
+  import('@/modules/analysis').then((m) => ({ default: m.AnalysisPage }))
 );
 const Discover = lazy(() => import('@/pages/Discover'));
 const AnimationDemo = lazy(() => import('@/pages/AnimationDemo'));
