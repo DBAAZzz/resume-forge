@@ -1,5 +1,7 @@
 import ky from 'ky';
 
+let hasWarnedMissingApiBaseUrl = false;
+
 /**
  * Get API base URL from environment variables
  * In development with Vite proxy, use empty string to proxy through Vite dev server
@@ -10,8 +12,20 @@ const getApiBaseUrl = () => {
   if (import.meta.env.DEV) {
     return '';
   }
-  // In production, use the configured API base URL
-  return import.meta.env.VITE_API_BASE_URL || '';
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+  if (baseUrl) {
+    return baseUrl;
+  }
+
+  if (!hasWarnedMissingApiBaseUrl) {
+    console.warn(
+      '[API] VITE_API_BASE_URL is not set in production. Requests will use relative paths and likely fail.'
+    );
+    hasWarnedMissingApiBaseUrl = true;
+  }
+
+  return '';
 };
 
 export const api = ky.create({

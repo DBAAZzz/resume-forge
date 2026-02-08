@@ -2,24 +2,5 @@
   "framework": "vite",
   "installCommand": "pnpm install --frozen-lockfile --prod=false",
   "buildCommand": "pnpm --filter @resume/web build",
-  "outputDirectory": "web/dist",
-  "rewrites": [
-    {
-      "source": "/file/:path*",
-      "destination": "/api/file/:path*"
-    },
-    {
-      "source": "/deepseek/:path*",
-      "destination": "/api/deepseek/:path*"
-    },
-    {
-      "source": "/crypto/:path*",
-      "destination": "/api/crypto/:path*"
-    }
-  ],
-  "functions": {
-    "api/**/*.ts": {
-      "maxDuration": 60
-    }
-  }
+  "outputDirectory": "web/dist"
 }
