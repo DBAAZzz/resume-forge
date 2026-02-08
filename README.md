@@ -4,15 +4,11 @@
 
 AI 简历分析与优化工具，支持简历解析、岗位匹配分析、流式反馈和编辑迭代。
 
-## 在线访问
+## 在线访问及演示视频
 
-- Demo：已部署在 Vercel（可从仓库 About 的 Website 入口访问）
-- GitHub：<https://github.com/DBAAZzz/resume-forge>
-- 演示视频：待补充
+已部署在 Vercel（可从仓库 About 的 Website 入口访问）
 
-## 演示视频
-
-[![Resume Forge Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://www.bilibili.com/video/BV1vGcPz9EwS/)
+[![Resume Forge Demo](https://i1.hdslb.com/bfs/archive/19e3ccd360585660728e9c1463776a01df3eee62.jpg@.webp)](https://www.bilibili.com/video/BV1vGcPz9EwS/)
 
 ## 功能概览
 
