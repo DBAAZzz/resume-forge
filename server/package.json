@@ -7,7 +7,7 @@
   "packageManager": "pnpm@10.28.2",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc && tsc-alias && node scripts/copy-template.mjs",
+    "build": "pnpm --filter @resume/types build && tsc && tsc-alias && node scripts/copy-template.mjs",
     "start": "node dist/index.js",
     "deploy": "pnpm build && pm2 startOrReload ecosystem.config.cjs --update-env",
     "pm2:logs": "pm2 logs resume-forge-server",
