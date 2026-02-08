@@ -75,7 +75,7 @@ export const JobMatchCard = ({ jobMatch }: JobMatchCardProps) => {
               已满足要求
             </p>
             <ul className="space-y-1">
-              {jobMatch.matchedRequirements.map((item, idx) => (
+              {jobMatch.matchedRequirements.map((item: string, idx: number) => (
                 <li
                   key={`${item}-${idx}`}
                   className={`text-xs leading-relaxed ${semanticToneConfig.success.text}`}
@@ -93,7 +93,7 @@ export const JobMatchCard = ({ jobMatch }: JobMatchCardProps) => {
               缺口要求
             </p>
             <ul className="space-y-1">
-              {jobMatch.missingRequirements.map((item, idx) => (
+              {jobMatch.missingRequirements.map((item: string, idx: number) => (
                 <li
                   key={`${item}-${idx}`}
                   className={`text-xs leading-relaxed ${semanticToneConfig.gap.text}`}
@@ -112,7 +112,7 @@ export const JobMatchCard = ({ jobMatch }: JobMatchCardProps) => {
             优先改进动作
           </p>
           <ul className="space-y-1">
-            {jobMatch.recommendations.map((item, idx) => (
+            {jobMatch.recommendations.map((item: string, idx: number) => (
               <li
                 key={`${item}-${idx}`}
                 className={`text-xs leading-relaxed ${semanticToneConfig.optimize.text}`}

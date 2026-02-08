@@ -49,7 +49,7 @@ export const TimelineIssueCard = ({ issue }: TimelineIssueCardProps) => {
           <div className="mt-3 flex items-start gap-2 border-t border-slate-100 pt-3">
             <span className="mt-0.5 font-mono text-[10px] uppercase text-slate-500">影响时段:</span>
             <div className="flex flex-wrap gap-1">
-              {issue.affectedPeriods.map((period, idx) => (
+              {issue.affectedPeriods.map((period: string, idx: number) => (
                 <span
                   key={`${period}-${idx}`}
                   className="rounded border border-slate-200 bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-700"

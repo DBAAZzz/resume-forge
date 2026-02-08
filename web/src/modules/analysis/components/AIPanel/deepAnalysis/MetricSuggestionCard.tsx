@@ -44,7 +44,7 @@ export const MetricSuggestionCard = ({ suggestion }: MetricSuggestionCardProps) 
               调查方向
             </div>
             <ul className="space-y-1">
-              {suggestion.questions.map((question, idx) => (
+              {suggestion.questions.map((question: string, idx: number) => (
                 <li
                   key={`${question}-${idx}`}
                   className="flex items-start gap-2 border-l border-slate-200 pl-2 font-mono text-xs text-slate-600"
