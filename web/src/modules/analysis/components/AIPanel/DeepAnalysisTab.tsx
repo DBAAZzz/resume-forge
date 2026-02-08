@@ -1,8 +1,10 @@
 import { toast } from 'sonner';
 
+import { MISSING_DEEPSEEK_API_KEY_MESSAGE, requireDeepseekApiKey } from '@/services/security';
 import {
   startBasicAnalysis,
   startDeepAnalysisWorkflow,
+  useAnalysisConfigStore,
   useAnalysisDocumentStore,
   useBasicAnalysisStore,
   useDeepAnalysisStore,
@@ -29,6 +31,7 @@ const getJobMatchTone = (score: number): SemanticTone => {
 
 export const DeepAnalysisTab = () => {
   const parsedContent = useAnalysisDocumentStore((state) => state.parsedContent);
+  const apiKey = useAnalysisConfigStore((state) => state.apiKey);
   const basicStatus = useBasicAnalysisStore((state) => state.status);
   const basicThinkingText = useBasicAnalysisStore((state) => state.thinkingText);
 
@@ -44,6 +47,13 @@ export const DeepAnalysisTab = () => {
       return;
     }
 
+    try {
+      requireDeepseekApiKey(apiKey);
+    } catch {
+      toast.error(MISSING_DEEPSEEK_API_KEY_MESSAGE);
+      return;
+    }
+
     await Promise.all([startBasicAnalysis(), startDeepAnalysisWorkflow()]);
   };
 
@@ -56,7 +66,7 @@ export const DeepAnalysisTab = () => {
     Boolean(deepInsights.jobMatch) ||
     Boolean(deepInsights.overallSuggestion);
 
-  if (basicStatus === 'idle' && deepStatus === 'idle' && !hasInsights) {
+  if (!isAnalyzing && !hasInsights) {
     return <IdleStateCard onStart={handleStartAnalysis} disabled={!parsedContent} />;
   }
 
