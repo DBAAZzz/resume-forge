@@ -71,25 +71,25 @@ export const buildApp = async () => {
     }
 
     if (requestOrigin) {
-      reply.header('Access-Control-Allow-Origin', requestOrigin);
-      reply.header('Vary', 'Origin');
+      reply.raw.setHeader('Access-Control-Allow-Origin', requestOrigin);
+      reply.raw.setHeader('Vary', 'Origin');
     } else if (allowAllOrigins) {
-      reply.header('Access-Control-Allow-Origin', '*');
+      reply.raw.setHeader('Access-Control-Allow-Origin', '*');
     }
 
     if (allowCredentials) {
-      reply.header('Access-Control-Allow-Credentials', 'true');
+      reply.raw.setHeader('Access-Control-Allow-Credentials', 'true');
     }
 
     const requestHeaders = request.headers['access-control-request-headers'];
-    reply.header(
+    reply.raw.setHeader(
       'Access-Control-Allow-Headers',
       typeof requestHeaders === 'string'
         ? requestHeaders
         : 'Content-Type, Authorization, X-Requested-With'
     );
-    reply.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-    reply.header('Access-Control-Max-Age', String(config.cors.maxAge));
+    reply.raw.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    reply.raw.setHeader('Access-Control-Max-Age', String(config.cors.maxAge));
 
     if (request.method === 'OPTIONS') {
       reply.code(204);
