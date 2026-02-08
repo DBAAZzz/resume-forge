@@ -3,16 +3,14 @@ import { Sparkles } from 'lucide-react';
 import { memo } from 'react';
 
 import { Typography } from '@/shared/components/base';
-import { useAnalysisStore } from '@/store/useAnalysisStore';
+import { startBasicAnalysis, useBasicAnalysisStore } from '@/store/analysis';
 
 import { ThinkingProcess } from './ThinkingProcess';
-import { useAnalysisToasts } from './useAnalysisToasts';
 
 export const ResumeScanTab = memo(() => {
-  const { aiSuggestions, status, thinkingText, startAnalysis } = useAnalysisStore();
-
-  // Enable toast notifications for analysis results
-  useAnalysisToasts();
+  const aiSuggestions = useBasicAnalysisStore((state) => state.aiSuggestions);
+  const status = useBasicAnalysisStore((state) => state.status);
+  const thinkingText = useBasicAnalysisStore((state) => state.thinkingText);
 
   const isAnalyzing = status === 'analyzing';
   const hasThinkingContent = !!thinkingText || isAnalyzing;
@@ -41,7 +39,7 @@ export const ResumeScanTab = memo(() => {
             </div>
 
             <button
-              onClick={() => startAnalysis()}
+              onClick={() => void startBasicAnalysis()}
               className="flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground transition-opacity hover:opacity-90"
             >
               <div className="absolute inset-0 translate-y-full bg-white/20 transition-transform duration-300 group-hover:translate-y-0" />

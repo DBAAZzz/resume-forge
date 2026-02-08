@@ -6,9 +6,11 @@ import { cn } from '@/shared/utils/classnames';
 
 import { DeepAnalysisTab } from './DeepAnalysisTab';
 import { ResumeScanTab } from './ResumeScanTab';
+import { useAnalysisToasts } from './useAnalysisToasts';
 
 export const AISuggestionsPanel = () => {
   const [activeTab, setActiveTab] = useState<'scan' | 'deep'>('deep');
+  useAnalysisToasts();
 
   const tabs = [
     // { id: 'scan', label: 'AI 简历扫描', icon: Sparkles }, // 暂时隐藏

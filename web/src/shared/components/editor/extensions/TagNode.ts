@@ -3,6 +3,27 @@ import { ReactNodeViewRenderer } from '@tiptap/react';
 
 import TagComponent from './TagComponent';
 
+import type { DeepseekModel } from '@resume/types';
+
+export interface TagOptimizerContext {
+  model?: DeepseekModel;
+  apiKey?: string;
+}
+
+export interface TagCandidateRequest {
+  text: string;
+  reason?: string;
+  context?: string;
+  candidateCount?: number;
+  model?: DeepseekModel;
+  apiKey?: string;
+}
+
+export interface TagNodeOptions {
+  getOptimizerContext: () => TagOptimizerContext | undefined;
+  requestTagCandidates?: (params: TagCandidateRequest) => Promise<string[]>;
+}
+
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     tag: {
@@ -19,18 +40,20 @@ declare module '@tiptap/core' {
   }
 }
 
-export const TagNode = Node.create({
+export const TagNode = Node.create<TagNodeOptions>({
   name: 'tag',
-
   group: 'inline',
-
   inline: true,
-
   atom: false,
-
   content: 'text*',
-
   selectable: false,
+
+  addOptions() {
+    return {
+      getOptimizerContext: () => undefined,
+      requestTagCandidates: undefined,
+    };
+  },
 
   addAttributes() {
     return {

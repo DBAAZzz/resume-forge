@@ -3,15 +3,20 @@ import { motion } from 'framer-motion';
 import { BriefcaseBusiness, NotebookPen, RotateCcw, X } from 'lucide-react';
 import { memo, useMemo, useState, type KeyboardEvent } from 'react';
 
-import { useAnalysisStore } from '@/store/useAnalysisStore';
-import { useDeepAnalysisStore } from '@/store/useDeepAnalysisStore';
+import {
+  resetAnalysisWorkflow,
+  useAnalysisConfigStore,
+  useDeepAnalysisStore,
+} from '@/store/analysis';
 
 import { ModelConfigMenu } from './ModelConfigMenu';
 import { SidebarItem } from './SidebarItem';
 
 export const DashboardSidebar = memo(() => {
-  const { targetRole, jobDescription, setTargetRole, setJobDescription, resetAnalysis } =
-    useAnalysisStore();
+  const targetRole = useAnalysisConfigStore((state) => state.targetRole);
+  const jobDescription = useAnalysisConfigStore((state) => state.jobDescription);
+  const setTargetRole = useAnalysisConfigStore((state) => state.setTargetRole);
+  const setJobDescription = useAnalysisConfigStore((state) => state.setJobDescription);
   const { resetDeepAnalysis } = useDeepAnalysisStore();
   const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
   const [isJdDialogOpen, setIsJdDialogOpen] = useState(false);
@@ -19,7 +24,7 @@ export const DashboardSidebar = memo(() => {
   const [draftJd, setDraftJd] = useState(jobDescription);
 
   const reset = () => {
-    resetAnalysis();
+    resetAnalysisWorkflow();
     resetDeepAnalysis();
   };
 

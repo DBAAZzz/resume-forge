@@ -1,22 +1,34 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, type ComponentType } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import MainLayout from '@/layouts/MainLayout';
 import { AnimatedLoader } from '@/shared/components/animated';
 
-// Lazy load page components
-const Home = lazy(() => import('@/pages/Home'));
-const Resume = lazy(() => import('@/pages/Resume'));
+// Lazy load page components from modules
+const HomePage = lazy(() => import('@/modules/home').then((m) => ({ default: m.HomePage })));
+const ResumePage = lazy(() => import('@/modules/resume').then((m) => ({ default: m.ResumePage })));
 const AnalysisPage = lazy(() =>
   import('@/modules/analysis').then((m) => ({ default: m.AnalysisPage }))
 );
-const Discover = lazy(() => import('@/pages/Discover'));
-const AnimationDemo = lazy(() => import('@/pages/AnimationDemo'));
-const DesignSystem = lazy(() => import('@/pages/DesignSystem'));
+const DiscoverPage = lazy(() =>
+  import('@/modules/discover').then((m) => ({ default: m.DiscoverPage }))
+);
+const AnimationDemoPage = lazy(() =>
+  import('@/modules/demo').then((m) => ({ default: m.AnimationDemoPage }))
+);
+const DesignSystemPage = lazy(() =>
+  import('@/modules/demo').then((m) => ({ default: m.DesignSystemPage }))
+);
 
 // Suspense wrapper
-const withSuspense = (Component: React.ComponentType) => (
-  <Suspense fallback={<AnimatedLoader />}>
+const suspenseFallback = (
+  <div className="flex h-full min-h-0 w-full items-center justify-center overflow-hidden">
+    <AnimatedLoader size="lg" />
+  </div>
+);
+
+const withSuspense = (Component: ComponentType) => (
+  <Suspense fallback={suspenseFallback}>
     <Component />
   </Suspense>
 );
@@ -28,11 +40,11 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: withSuspense(Home),
+        element: withSuspense(HomePage),
       },
       {
         path: 'resume',
-        element: withSuspense(Resume),
+        element: withSuspense(ResumePage),
       },
       {
         path: 'analysis',
@@ -40,15 +52,15 @@ const router = createBrowserRouter([
       },
       {
         path: 'discover',
-        element: withSuspense(Discover),
+        element: withSuspense(DiscoverPage),
       },
       {
         path: 'demo',
-        element: withSuspense(AnimationDemo),
+        element: withSuspense(AnimationDemoPage),
       },
       {
         path: 'design-system',
-        element: withSuspense(DesignSystem),
+        element: withSuspense(DesignSystemPage),
       },
     ],
   },

@@ -1,5 +1,12 @@
-import { useAnalysisStore } from '@/store/useAnalysisStore';
-import { useDeepAnalysisStore } from '@/store/useDeepAnalysisStore';
+import { toast } from 'sonner';
+
+import {
+  startBasicAnalysis,
+  startDeepAnalysisWorkflow,
+  useAnalysisDocumentStore,
+  useBasicAnalysisStore,
+  useDeepAnalysisStore,
+} from '@/store/analysis';
 
 import {
   IdleStateCard,
@@ -11,7 +18,6 @@ import {
   TimelineIssueCard,
 } from './deepAnalysis';
 import { ThinkingProcess } from './ThinkingProcess';
-import { useAnalysisToasts } from './useAnalysisToasts';
 
 import type { SemanticTone } from './deepAnalysis/semantic';
 
@@ -22,34 +28,23 @@ const getJobMatchTone = (score: number): SemanticTone => {
 };
 
 export const DeepAnalysisTab = () => {
-  const parsedContent = useAnalysisStore((state) => state.parsedContent);
-  const model = useAnalysisStore((state) => state.model);
-  const apiKey = useAnalysisStore((state) => state.apiKey);
-  const targetRole = useAnalysisStore((state) => state.targetRole);
-  const jobDescription = useAnalysisStore((state) => state.jobDescription);
-  const basicStatus = useAnalysisStore((state) => state.status);
-  const basicThinkingText = useAnalysisStore((state) => state.thinkingText);
-  const startBasicAnalysis = useAnalysisStore((state) => state.startAnalysis);
+  const parsedContent = useAnalysisDocumentStore((state) => state.parsedContent);
+  const basicStatus = useBasicAnalysisStore((state) => state.status);
+  const basicThinkingText = useBasicAnalysisStore((state) => state.thinkingText);
 
   const {
     deepInsights,
     status: deepStatus,
     thinkingText: deepThinkingText,
-    startDeepAnalysis,
   } = useDeepAnalysisStore();
-
-  useAnalysisToasts();
 
   const handleStartAnalysis = async () => {
     if (!parsedContent) {
-      alert('请先上传并解析简历');
+      toast.error('请先上传并解析简历');
       return;
     }
 
-    await Promise.all([
-      startBasicAnalysis(),
-      startDeepAnalysis(parsedContent, model, apiKey, targetRole, jobDescription),
-    ]);
+    await Promise.all([startBasicAnalysis(), startDeepAnalysisWorkflow()]);
   };
 
   const isAnalyzing = basicStatus === 'analyzing' || deepStatus === 'analyzing';

@@ -1,7 +1,7 @@
+import { requestTagCandidates } from '@/api/ai';
 import { encryptDeepseekApiKey } from '@/services/security/deepseekApiKey';
-import { http } from '@/shared/utils/fetch';
 
-import type { DeepseekModel, TagOptimizationResponse } from '@resume/types';
+import type { DeepseekModel } from '@resume/types';
 
 interface OptimizeTagCandidatesParams {
   text: string;
@@ -22,7 +22,7 @@ export const optimizeTagCandidates = async ({
 }: OptimizeTagCandidatesParams): Promise<string[]> => {
   const encryptedApiKey = await encryptDeepseekApiKey(apiKey);
 
-  const response = await http.post<TagOptimizationResponse>('deepseek/optimize-tag-candidates', {
+  const response = await requestTagCandidates({
     text,
     reason,
     context,

@@ -1,11 +1,17 @@
 import { LoaderCircle, Sparkles } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-import { TiptapEditor } from '@/modules/editor';
+import { optimizeTagCandidates } from '@/services/ai/tagOptimizer';
 import { Button } from '@/shared/components/base';
+import { TiptapEditor } from '@/shared/components/editor';
 import { cn } from '@/shared/utils/classnames';
-import { useAnalysisStore } from '@/store/useAnalysisStore';
+import {
+  formatParsedContent as runFormatParsedContent,
+  useAnalysisConfigStore,
+  useAnalysisDocumentStore,
+  useBasicAnalysisStore,
+} from '@/store/analysis';
 
 import { EditorFormatToolbar } from './EditorFormatToolbar';
 
@@ -13,14 +19,15 @@ import type { Editor } from '@tiptap/core';
 
 export const ParsedContentPanel = () => {
   const [editor, setEditor] = useState<Editor | null>(null);
-  const {
-    parsedContent,
-    formatStreamingContent,
-    aiSuggestions,
-    isFormatting,
-    formatParsedContent,
-    setParsedContentDraft,
-  } = useAnalysisStore();
+  const parsedContent = useAnalysisDocumentStore((state) => state.parsedContent);
+  const formatStreamingContent = useAnalysisDocumentStore((state) => state.formatStreamingContent);
+  const formatStatus = useAnalysisDocumentStore((state) => state.formatStatus);
+  const setParsedContentDraft = useAnalysisDocumentStore((state) => state.setParsedContentDraft);
+  const aiSuggestions = useBasicAnalysisStore((state) => state.aiSuggestions);
+  const model = useAnalysisConfigStore((state) => state.model);
+  const apiKey = useAnalysisConfigStore((state) => state.apiKey);
+  const isFormatting = formatStatus === 'formatting';
+  const optimizerContext = useMemo(() => ({ model, apiKey }), [model, apiKey]);
   const hasContent = Boolean(parsedContent?.trim());
   const displayContent = isFormatting
     ? (formatStreamingContent ?? '')
@@ -35,7 +42,7 @@ export const ParsedContentPanel = () => {
     if (!hasContent || isFormatting) return;
 
     try {
-      await formatParsedContent();
+      await runFormatParsedContent();
       toast.success('文本层次格式化完成');
     } catch (error) {
       toast.error(error instanceof Error ? error.message : '文本格式化失败');
@@ -78,6 +85,8 @@ export const ParsedContentPanel = () => {
             className="min-h-[200px]"
             editable={!isFormatting}
             suggestions={aiSuggestions}
+            optimizerContext={optimizerContext}
+            onRequestTagCandidates={optimizeTagCandidates}
             onContentChange={isFormatting ? undefined : setParsedContentDraft}
             onEditorReady={setEditor}
           />

@@ -1,15 +1,15 @@
-import { DEEP_INSIGHT_TYPE } from '@resume/types';
+import {
+  DEEP_INSIGHT_TYPE,
+  type DeepseekModel,
+  type JobMatchInsight,
+  type MetricSuggestion,
+  type SkillIssue,
+  type TimelineIssue,
+} from '@resume/types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { analyzeDeepInsights } from '@/modules/analysis/api';
-import type {
-  AnalysisModel,
-  TimelineIssue,
-  SkillIssue,
-  MetricSuggestion,
-  JobMatchInsight,
-} from '@/modules/analysis/types';
+import { analyzeDeepInsights } from '@/services/analysis';
 
 interface DeepInsights {
   timelineIssues: TimelineIssue[];
@@ -27,7 +27,7 @@ interface DeepAnalysisState {
 
   startDeepAnalysis: (
     content: string,
-    model?: AnalysisModel,
+    model?: DeepseekModel,
     apiKey?: string,
     targetRole?: string,
     jobDescription?: string
@@ -51,13 +51,12 @@ export const useDeepAnalysisStore = create<DeepAnalysisState>()(
 
       startDeepAnalysis: async (
         content: string,
-        model: AnalysisModel = 'deepseek-reasoner',
+        model: DeepseekModel = 'deepseek-reasoner',
         apiKey?: string,
         targetRole?: string,
         jobDescription?: string
       ) => {
         if (!content) {
-          console.error('No content provided for deep analysis');
           return;
         }
 

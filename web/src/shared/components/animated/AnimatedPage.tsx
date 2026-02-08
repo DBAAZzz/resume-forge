@@ -1,21 +1,28 @@
 import { motion } from 'framer-motion';
 
-import { pageVariants } from '@/shared/utils/animations';
+import { fadeInVariants, pageVariants } from '@/shared/utils/animations';
 
 import type { ReactNode } from 'react';
 
 interface AnimatedPageProps {
   children: ReactNode;
   className?: string;
+  transition?: 'slide' | 'fade';
 }
 
-export function AnimatedPage({ children, className = '' }: AnimatedPageProps) {
+export function AnimatedPage({
+  children,
+  className = '',
+  transition = 'slide',
+}: AnimatedPageProps) {
+  const variants = transition === 'fade' ? fadeInVariants : pageVariants;
+
   return (
     <motion.div
       initial="initial"
       animate="animate"
       exit="exit"
-      variants={pageVariants}
+      variants={variants}
       className={className}
     >
       {children}

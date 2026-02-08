@@ -6,9 +6,14 @@ import Typography from '@tiptap/extension-typography';
 import StarterKit from '@tiptap/starter-kit';
 import { Markdown } from 'tiptap-markdown';
 
-import { TagNode } from '../extensions/TagNode';
+import { TagNode, type TagNodeOptions } from '../extensions/TagNode';
 
-export const editorExtensions = [
+export interface EditorExtensionOptions {
+  getOptimizerContext?: TagNodeOptions['getOptimizerContext'];
+  requestTagCandidates?: TagNodeOptions['requestTagCandidates'];
+}
+
+export const createEditorExtensions = (options: EditorExtensionOptions = {}) => [
   StarterKit.configure({
     heading: {
       levels: [1, 2, 3],
@@ -22,5 +27,10 @@ export const editorExtensions = [
   TableHeader,
   TableCell,
   TableRow,
-  TagNode,
+  TagNode.configure({
+    getOptimizerContext: options.getOptimizerContext ?? (() => undefined),
+    requestTagCandidates: options.requestTagCandidates,
+  }),
 ];
+
+export const editorExtensions = createEditorExtensions();

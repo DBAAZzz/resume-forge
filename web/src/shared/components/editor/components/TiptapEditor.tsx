@@ -3,10 +3,11 @@ import { useEffect, useMemo, useRef } from 'react';
 
 import { cn } from '@/shared/utils/classnames';
 
-import { editorExtensions } from '../config/extensions';
+import { createEditorExtensions } from '../config/extensions';
 import { useTagHighlighter } from '../hooks/useTagHighlighter';
 import './TiptapEditor.css';
 
+import type { TagCandidateRequest, TagOptimizerContext } from '../extensions/TagNode';
 import type { Editor } from '@tiptap/core';
 
 interface TiptapEditorProps {
@@ -20,6 +21,8 @@ interface TiptapEditorProps {
   } | null;
   onSuggestionsChange?: (suggestions: TiptapEditorProps['suggestions']) => void;
   onEditorReady?: (editor: Editor | null) => void;
+  optimizerContext?: TagOptimizerContext;
+  onRequestTagCandidates?: (params: TagCandidateRequest) => Promise<string[]>;
 }
 
 export const TiptapEditor = ({
@@ -29,12 +32,23 @@ export const TiptapEditor = ({
   onContentChange,
   suggestions,
   onEditorReady,
+  optimizerContext,
+  onRequestTagCandidates,
 }: TiptapEditorProps) => {
   // 跟踪最新内容，避免外部状态同步时重复 setContent 导致光标抖动
   const prevContentRef = useRef(content);
 
+  const extensions = useMemo(
+    () =>
+      createEditorExtensions({
+        getOptimizerContext: () => optimizerContext,
+        requestTagCandidates: onRequestTagCandidates,
+      }),
+    [optimizerContext, onRequestTagCandidates]
+  );
+
   const editor = useEditor({
-    extensions: editorExtensions,
+    extensions,
     content,
     editable,
     editorProps: {

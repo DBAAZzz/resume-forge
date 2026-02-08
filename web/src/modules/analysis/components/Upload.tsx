@@ -4,26 +4,26 @@ import { Upload, Check, Download } from 'lucide-react';
 import { useState, Fragment } from 'react';
 import { toast } from 'sonner';
 
+import { downloadResumeTemplate } from '@/services/analysis';
 import { AnimatedButton } from '@/shared/components/animated';
 import { Button, Typography } from '@/shared/components/base';
 import { containerVariants, itemVariants } from '@/shared/utils/animations';
-import { useAnalysisStore } from '@/store/useAnalysisStore';
-
-import { downloadResumeTemplate } from '../api';
+import {
+  parseSelectedFile,
+  useAnalysisConfigStore,
+  useAnalysisDocumentStore,
+} from '@/store/analysis';
 
 export const AnalysisUpload = () => {
   const [isDragging, setIsDragging] = useState(false);
-  const {
-    file,
-    targetRole,
-    jobDescription,
-    setFile,
-    setTargetRole,
-    setJobDescription,
-    setParsedContent,
-    status,
-    error,
-  } = useAnalysisStore();
+  const targetRole = useAnalysisConfigStore((state) => state.targetRole);
+  const jobDescription = useAnalysisConfigStore((state) => state.jobDescription);
+  const setTargetRole = useAnalysisConfigStore((state) => state.setTargetRole);
+  const setJobDescription = useAnalysisConfigStore((state) => state.setJobDescription);
+  const file = useAnalysisDocumentStore((state) => state.file);
+  const parseStatus = useAnalysisDocumentStore((state) => state.parseStatus);
+  const parseError = useAnalysisDocumentStore((state) => state.parseError);
+  const setFile = useAnalysisDocumentStore((state) => state.setFile);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -51,7 +51,11 @@ export const AnalysisUpload = () => {
 
   const handleConfirm = async () => {
     if (file) {
-      await setParsedContent();
+      try {
+        await parseSelectedFile();
+      } catch {
+        // parseSelectedFile already syncs parseError into store for UI rendering
+      }
     }
   };
 
@@ -63,7 +67,7 @@ export const AnalysisUpload = () => {
     }
   };
 
-  const isProcessing = status === 'analyzing' || status === 'uploading';
+  const isProcessing = parseStatus === 'uploading';
 
   return (
     <motion.div
@@ -227,14 +231,14 @@ export const AnalysisUpload = () => {
             </div>
           </motion.div>
 
-          {error && (
+          {parseError && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="rounded-xl border border-red-200 bg-red-50/70 px-3 py-2 text-left"
             >
               <Typography variant="small" className="text-red-600">
-                {error}
+                {parseError}
               </Typography>
             </motion.div>
           )}
@@ -245,7 +249,7 @@ export const AnalysisUpload = () => {
             disabled={!file || isProcessing}
             onClick={handleConfirm}
           >
-            {isProcessing ? '正在解析...' : '确认并解析简历'}
+            {parseStatus === 'uploading' ? '正在解析...' : '确认并解析简历'}
           </AnimatedButton>
         </div>
       </motion.div>

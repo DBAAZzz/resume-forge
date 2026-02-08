@@ -58,23 +58,26 @@ export const api = ky.create({
   },
 });
 
+const normalizeApiPath = (url: string) => (url.startsWith('/') ? url.slice(1) : url);
+
 /**
  * Type-safe wrapper for common HTTP methods
  */
 export const http = {
-  get: <T>(url: string, options?: Parameters<typeof api.get>[1]) => api.get(url, options).json<T>(),
+  get: <T>(url: string, options?: Parameters<typeof api.get>[1]) =>
+    api.get(normalizeApiPath(url), options).json<T>(),
 
   post: <T>(url: string, json?: unknown, options?: Parameters<typeof api.post>[1]) =>
-    api.post(url, { json, ...options }).json<T>(),
+    api.post(normalizeApiPath(url), { json, ...options }).json<T>(),
 
   put: <T>(url: string, json?: unknown, options?: Parameters<typeof api.put>[1]) =>
-    api.put(url, { json, ...options }).json<T>(),
+    api.put(normalizeApiPath(url), { json, ...options }).json<T>(),
 
   delete: <T>(url: string, options?: Parameters<typeof api.delete>[1]) =>
-    api.delete(url, options).json<T>(),
+    api.delete(normalizeApiPath(url), options).json<T>(),
 
   patch: <T>(url: string, json?: unknown, options?: Parameters<typeof api.patch>[1]) =>
-    api.patch(url, { json, ...options }).json<T>(),
+    api.patch(normalizeApiPath(url), { json, ...options }).json<T>(),
 };
 
 /**
@@ -84,5 +87,5 @@ export const uploadFile = async <T>(url: string, file: File, fieldName = 'file')
   const formData = new FormData();
   formData.append(fieldName, file);
 
-  return api.post(url, { body: formData }).json<T>();
+  return api.post(normalizeApiPath(url), { body: formData }).json<T>();
 };

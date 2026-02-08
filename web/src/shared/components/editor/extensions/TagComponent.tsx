@@ -11,8 +11,7 @@ import { Loader2, PencilLine, Wand2, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { optimizeTagCandidates } from '@/services/ai/tagOptimizer';
-import { useAnalysisStore } from '@/store/useAnalysisStore';
+import type { TagNodeOptions } from './TagNode';
 
 interface TextDiff {
   prefix: string;
@@ -27,9 +26,7 @@ const TagComponent = (props: NodeViewProps) => {
   const reason = (node.attrs.reason as string) || '';
   const isWeaknessTag = type === 'weakness';
   const isEditableTag = type === 'neutral';
-
-  const model = useAnalysisStore((state) => state.model);
-  const apiKey = useAnalysisStore((state) => state.apiKey);
+  const extensionOptions = props.extension.options as TagNodeOptions;
 
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [isCandidateModalOpen, setIsCandidateModalOpen] = useState(false);
@@ -80,13 +77,21 @@ const TagComponent = (props: NodeViewProps) => {
     setCandidateError(null);
 
     try {
-      const result = await optimizeTagCandidates({
+      const requestTagCandidates = extensionOptions.requestTagCandidates;
+      if (!requestTagCandidates) {
+        setCandidates([]);
+        setCandidateError('未配置 AI 优化服务');
+        return;
+      }
+
+      const optimizerContext = extensionOptions.getOptimizerContext?.() ?? {};
+      const result = await requestTagCandidates({
         text: sourceText,
         reason,
         context: buildContextWindow(),
         candidateCount: 3,
-        model,
-        apiKey,
+        model: optimizerContext.model,
+        apiKey: optimizerContext.apiKey,
       });
 
       if (!result.length) {

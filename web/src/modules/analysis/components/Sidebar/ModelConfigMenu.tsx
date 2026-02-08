@@ -18,7 +18,7 @@ import { memo, useState } from 'react';
 
 import { validateDeepseekApiKey } from '@/services/security/deepseekApiKey';
 import { cn } from '@/shared/utils/classnames';
-import { useAnalysisStore } from '@/store/useAnalysisStore';
+import { useAnalysisConfigStore } from '@/store/analysis';
 
 import { MODEL_OPTIONS_BY_VENDOR, VENDOR_OPTIONS, type VendorOption } from './modelConfig';
 
@@ -120,7 +120,12 @@ const VendorCard = ({
 };
 
 export const ModelConfigMenu = memo(() => {
-  const { vendor, model, apiKey, setVendor, setModel, setApiKey } = useAnalysisStore();
+  const vendor = useAnalysisConfigStore((state) => state.vendor);
+  const model = useAnalysisConfigStore((state) => state.model);
+  const apiKey = useAnalysisConfigStore((state) => state.apiKey);
+  const setVendor = useAnalysisConfigStore((state) => state.setVendor);
+  const setModel = useAnalysisConfigStore((state) => state.setModel);
+  const setApiKey = useAnalysisConfigStore((state) => state.setApiKey);
 
   const [isOpen, setIsOpen] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
