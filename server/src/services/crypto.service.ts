@@ -1,16 +1,40 @@
-import { constants, generateKeyPairSync, privateDecrypt } from 'node:crypto';
+import { constants, createPublicKey, generateKeyPairSync, privateDecrypt } from 'node:crypto';
 
-const deepseekKeyPair = generateKeyPairSync('rsa', {
-  modulusLength: 2048,
-  publicKeyEncoding: {
-    type: 'spki',
-    format: 'pem',
-  },
-  privateKeyEncoding: {
-    type: 'pkcs8',
-    format: 'pem',
-  },
-});
+import { config } from '../config/env.js';
+
+function createEphemeralKeyPair() {
+  return generateKeyPairSync('rsa', {
+    modulusLength: 2048,
+    publicKeyEncoding: {
+      type: 'spki',
+      format: 'pem',
+    },
+    privateKeyEncoding: {
+      type: 'pkcs8',
+      format: 'pem',
+    },
+  });
+}
+
+function createConfiguredKeyPair() {
+  const privateKey = config.crypto.deepseekRsaPrivateKey;
+  if (!privateKey) {
+    return createEphemeralKeyPair();
+  }
+
+  const publicKey =
+    config.crypto.deepseekRsaPublicKey ||
+    createPublicKey(privateKey)
+      .export({
+        type: 'spki',
+        format: 'pem',
+      })
+      .toString();
+
+  return { privateKey, publicKey };
+}
+
+const deepseekKeyPair = createConfiguredKeyPair();
 
 export const getDeepseekPublicKey = (): string => deepseekKeyPair.publicKey;
 

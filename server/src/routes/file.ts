@@ -1,9 +1,31 @@
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { parseMultipartFile } from '../utils/file.utils.js';
 
 import type { FastifyInstance } from 'fastify';
+
+async function resolveTemplatePath() {
+  const routesDir = path.dirname(fileURLToPath(import.meta.url));
+  const candidates = [
+    // Production dist path: server/dist/template/resume-template.md
+    path.resolve(routesDir, '../template/resume-template.md'),
+    // Source path for local dev: server/src/template/resume-template.md
+    path.resolve(routesDir, '../../src/template/resume-template.md'),
+  ];
+
+  for (const candidate of candidates) {
+    try {
+      await access(candidate);
+      return candidate;
+    } catch {
+      // Continue to next candidate.
+    }
+  }
+
+  throw new Error(`Resume template not found. Tried: ${candidates.join(', ')}`);
+}
 
 export async function fileRoutes(app: FastifyInstance) {
   /**
@@ -12,7 +34,7 @@ export async function fileRoutes(app: FastifyInstance) {
    */
   app.get('/file/template/resume', async (request, reply) => {
     try {
-      const templatePath = path.resolve(process.cwd(), 'src/template/resume-template.md');
+      const templatePath = await resolveTemplatePath();
       const content = await readFile(templatePath);
 
       reply.header('Content-Type', 'text/markdown; charset=utf-8');

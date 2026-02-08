@@ -7,8 +7,12 @@
   "packageManager": "pnpm@10.28.2",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc && tsc-alias",
+    "build": "tsc && tsc-alias && node scripts/copy-template.mjs",
     "start": "node dist/index.js",
+    "deploy": "pnpm build && pm2 startOrReload ecosystem.config.cjs --update-env",
+    "pm2:logs": "pm2 logs resume-forge-server",
+    "pm2:stop": "pm2 stop resume-forge-server",
+    "pm2:delete": "pm2 delete resume-forge-server",
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
