@@ -2,5 +2,6 @@
   "framework": "vite",
   "installCommand": "pnpm install --frozen-lockfile --prod=false",
   "buildCommand": "pnpm --filter @resume/web build",
-  "outputDirectory": "web/dist"
+  "outputDirectory": "web/dist",
+  "routes": [{ "handle": "filesystem" }, { "src": "/(.*)", "dest": "/index.html" }]
 }

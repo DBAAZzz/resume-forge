@@ -4,7 +4,7 @@ import {
   createResumeAnalysisStream,
 } from '@/api/ai';
 import { requestParsedFile, requestResumeTemplateBlob } from '@/api/file';
-import { encryptDeepseekApiKey } from '@/services/security/deepseekApiKey';
+import { encryptDeepseekApiKey, requireDeepseekApiKey } from '@/services/security';
 
 import type {
   ContentFormatStreamEvent,
@@ -78,7 +78,8 @@ export const analyzeResumeStream = async function* (
   targetRole?: string,
   jobDescription?: string
 ): AsyncGenerator<SSEEvent> {
-  const encryptedApiKey = await encryptDeepseekApiKey(apiKey);
+  const requiredApiKey = requireDeepseekApiKey(apiKey);
+  const encryptedApiKey = await encryptDeepseekApiKey(requiredApiKey);
   const response = await createResumeAnalysisStream({
     content,
     model,
@@ -97,7 +98,8 @@ export const analyzeDeepInsights = async function* (
   targetRole?: string,
   jobDescription?: string
 ): AsyncGenerator<DeepInsightEvent> {
-  const encryptedApiKey = await encryptDeepseekApiKey(apiKey);
+  const requiredApiKey = requireDeepseekApiKey(apiKey);
+  const encryptedApiKey = await encryptDeepseekApiKey(requiredApiKey);
   const response = await createDeepInsightsStream({
     content,
     model,
@@ -114,7 +116,8 @@ export const formatContentHierarchyStream = async function* (
   model: DeepseekModel = 'deepseek-reasoner',
   apiKey?: string
 ): AsyncGenerator<ContentFormatStreamEvent> {
-  const encryptedApiKey = await encryptDeepseekApiKey(apiKey);
+  const requiredApiKey = requireDeepseekApiKey(apiKey);
+  const encryptedApiKey = await encryptDeepseekApiKey(requiredApiKey);
   const response = await createFormatHierarchyStream({
     content,
     model,

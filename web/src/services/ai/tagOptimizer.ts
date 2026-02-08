@@ -1,5 +1,5 @@
 import { requestTagCandidates } from '@/api/ai';
-import { encryptDeepseekApiKey } from '@/services/security/deepseekApiKey';
+import { encryptDeepseekApiKey, requireDeepseekApiKey } from '@/services/security';
 
 import type { DeepseekModel } from '@resume/types';
 
@@ -20,7 +20,8 @@ export const optimizeTagCandidates = async ({
   model,
   apiKey,
 }: OptimizeTagCandidatesParams): Promise<string[]> => {
-  const encryptedApiKey = await encryptDeepseekApiKey(apiKey);
+  const requiredApiKey = requireDeepseekApiKey(apiKey);
+  const encryptedApiKey = await encryptDeepseekApiKey(requiredApiKey);
 
   const response = await requestTagCandidates({
     text,
