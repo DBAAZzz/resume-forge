@@ -6,10 +6,9 @@
   "packageManager": "pnpm@10.28.2",
   "scripts": {
     "dev": "vite",
-    "prebuild": "pnpm --filter @resume/types build",
     "typecheck": "tsc -b",
     "build:bundle": "vite build",
-    "build": "pnpm run typecheck && pnpm run build:bundle",
+    "build": "pnpm --filter @resume/types build && pnpm run typecheck && pnpm run build:bundle",
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
     "preview": "vite preview"

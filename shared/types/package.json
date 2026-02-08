@@ -15,6 +15,6 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -b --clean tsconfig.json && tsc -b tsconfig.json"
   }
 }
