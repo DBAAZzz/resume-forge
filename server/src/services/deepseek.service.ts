@@ -554,21 +554,33 @@ export async function* analyzeResumeStructuredStream(
 
     // 最后发送完整结果作为兜底（可选，保持兼容性）
     yield { type: SSE_TYPE.DONE };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorInfo = error as {
+      constructor?: { name?: string };
+      message?: string;
+      name?: string;
+      url?: string;
+      statusCode?: number;
+      responseHeaders?: unknown;
+      responseBody?: unknown;
+      cause?: { url?: string };
+      stack?: string;
+    };
+
     console.error('=== DeepSeek API Error ===');
-    console.error('Error type:', error.constructor.name);
-    console.error('Error message:', error.message);
-    console.error('Error name:', error.name);
-    if (error.url) console.error('Request URL:', error.url);
-    if (error.statusCode) console.error('Status Code:', error.statusCode);
-    if (error.responseHeaders) console.error('Response Headers:', error.responseHeaders);
-    if (error.responseBody) console.error('Response Body:', error.responseBody);
-    if (error.cause) {
-      console.error('Error Cause:', error.cause);
-      if (error.cause.url) console.error('Cause URL:', error.cause.url);
+    console.error('Error type:', errorInfo.constructor?.name ?? typeof error);
+    console.error('Error message:', errorInfo.message);
+    console.error('Error name:', errorInfo.name);
+    if (errorInfo.url) console.error('Request URL:', errorInfo.url);
+    if (errorInfo.statusCode) console.error('Status Code:', errorInfo.statusCode);
+    if (errorInfo.responseHeaders) console.error('Response Headers:', errorInfo.responseHeaders);
+    if (errorInfo.responseBody) console.error('Response Body:', errorInfo.responseBody);
+    if (errorInfo.cause) {
+      console.error('Error Cause:', errorInfo.cause);
+      if (errorInfo.cause.url) console.error('Cause URL:', errorInfo.cause.url);
     }
-    console.error('Full error object:', JSON.stringify(error, null, 2));
-    console.error('Error stack:', error.stack);
+    console.error('Full error object:', JSON.stringify(errorInfo, null, 2));
+    console.error('Error stack:', errorInfo.stack);
 
     yield { type: SSE_TYPE.ERROR, value: error instanceof Error ? error.message : String(error) };
   }
@@ -841,21 +853,33 @@ export async function* analyzeResumeDeepInsights(
     }
 
     yield { type: DEEP_INSIGHT_TYPE.DONE };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorInfo = error as {
+      constructor?: { name?: string };
+      message?: string;
+      name?: string;
+      url?: string;
+      statusCode?: number;
+      responseHeaders?: unknown;
+      responseBody?: unknown;
+      cause?: { url?: string };
+      stack?: string;
+    };
+
     console.error('=== DeepSeek Deep Insight Error ===');
-    console.error('Error type:', error.constructor.name);
-    console.error('Error message:', error.message);
-    console.error('Error name:', error.name);
-    if (error.url) console.error('Request URL:', error.url);
-    if (error.statusCode) console.error('Status Code:', error.statusCode);
-    if (error.responseHeaders) console.error('Response Headers:', error.responseHeaders);
-    if (error.responseBody) console.error('Response Body:', error.responseBody);
-    if (error.cause) {
-      console.error('Error Cause:', error.cause);
-      if (error.cause.url) console.error('Cause URL:', error.cause.url);
+    console.error('Error type:', errorInfo.constructor?.name ?? typeof error);
+    console.error('Error message:', errorInfo.message);
+    console.error('Error name:', errorInfo.name);
+    if (errorInfo.url) console.error('Request URL:', errorInfo.url);
+    if (errorInfo.statusCode) console.error('Status Code:', errorInfo.statusCode);
+    if (errorInfo.responseHeaders) console.error('Response Headers:', errorInfo.responseHeaders);
+    if (errorInfo.responseBody) console.error('Response Body:', errorInfo.responseBody);
+    if (errorInfo.cause) {
+      console.error('Error Cause:', errorInfo.cause);
+      if (errorInfo.cause.url) console.error('Cause URL:', errorInfo.cause.url);
     }
-    console.error('Full error object:', JSON.stringify(error, null, 2));
-    console.error('Error stack:', error.stack);
+    console.error('Full error object:', JSON.stringify(errorInfo, null, 2));
+    console.error('Error stack:', errorInfo.stack);
 
     yield {
       type: DEEP_INSIGHT_TYPE.ERROR,

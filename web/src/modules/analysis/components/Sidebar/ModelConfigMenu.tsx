@@ -14,7 +14,7 @@ import {
   Sparkles,
   X,
 } from 'lucide-react';
-import { memo, useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 
 import { validateDeepseekApiKey } from '@/services/security/deepseekApiKey';
 import { cn } from '@/shared/utils/classnames';
@@ -135,16 +135,19 @@ export const ModelConfigMenu = memo(() => {
   const modelOptions = MODEL_OPTIONS_BY_VENDOR[draftVendor];
   const hasChanges = draftVendor !== vendor || draftModel !== model || draftApiKey !== apiKey;
 
-  useEffect(() => {
-    if (!isOpen) return;
-
+  const handleOpen = () => {
     setDraftVendor(vendor);
     setDraftModel(model);
     setDraftApiKey(apiKey);
     setShowApiKey(false);
     setKeyCheckStatus('idle');
     setKeyCheckMessage('');
-  }, [isOpen, vendor, model, apiKey]);
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
 
   const handleSelectVendor = (option: VendorOption) => {
     if (option.status !== 'available') return;
@@ -163,7 +166,7 @@ export const ModelConfigMenu = memo(() => {
     setVendor(draftVendor);
     setModel(draftModel);
     setApiKey(draftApiKey);
-    setIsOpen(false);
+    handleClose();
   };
 
   const handleValidateApiKey = async () => {
@@ -191,14 +194,14 @@ export const ModelConfigMenu = memo(() => {
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(true)}
+        onClick={handleOpen}
         className="flex h-12 w-12 items-center justify-center rounded-2xl text-gray-400 outline-none transition-all duration-300 hover:bg-gray-100/80 hover:text-black"
         title="模型配置"
       >
         <Settings2 className="h-5 w-5" strokeWidth={2} />
       </motion.button>
 
-      <Dialog open={isOpen} onClose={setIsOpen} className="relative z-50">
+      <Dialog open={isOpen} onClose={handleClose} className="relative z-50">
         <div className="fixed inset-0 bg-black/30 backdrop-blur-[2px]" aria-hidden="true" />
 
         <div className="fixed inset-0 flex items-center justify-center p-4">
@@ -215,7 +218,7 @@ export const ModelConfigMenu = memo(() => {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleClose}
                   className="rounded-xl p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
                 >
                   <X className="h-4 w-4" />

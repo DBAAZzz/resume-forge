@@ -90,8 +90,12 @@ const Home = () => {
                   <br />
                   是精准传达你的岗位价值
                 </Typography>
-                <Typography variant="lead" className="max-w-2xl text-base leading-7 text-muted-foreground">
-                  上传简历后，系统会自动完成结构化解析、岗位匹配诊断与 AI 文案增强，帮助你用更短时间把简历打磨到“更容易被选中”的状态。
+                <Typography
+                  variant="lead"
+                  className="max-w-2xl text-base leading-7 text-muted-foreground"
+                >
+                  上传简历后，系统会自动完成结构化解析、岗位匹配诊断与 AI
+                  文案增强，帮助你用更短时间把简历打磨到“更容易被选中”的状态。
                 </Typography>
               </div>
 
@@ -107,8 +111,13 @@ const Home = () => {
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {metrics.map((metric) => (
-                  <div key={metric.label} className="rounded-xl border border-border/70 bg-background/85 px-4 py-3">
-                    <p className="text-xs uppercase tracking-wider text-muted-foreground">{metric.label}</p>
+                  <div
+                    key={metric.label}
+                    className="rounded-xl border border-border/70 bg-background/85 px-4 py-3"
+                  >
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                      {metric.label}
+                    </p>
                     <p className="mt-1 text-sm font-semibold text-foreground">{metric.value}</p>
                   </div>
                 ))}
@@ -170,7 +179,10 @@ const Home = () => {
                 <Typography variant="h4" className="mb-1 text-xl">
                   {title}
                 </Typography>
-                <Typography variant="p" className="mt-0 text-sm font-medium leading-6 text-foreground/75">
+                <Typography
+                  variant="p"
+                  className="mt-0 text-sm font-medium leading-6 text-foreground/75"
+                >
                   {summary}
                 </Typography>
                 <Typography variant="p" className="mt-3 text-sm leading-6 text-muted-foreground">

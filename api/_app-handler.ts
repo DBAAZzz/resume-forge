@@ -1,12 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 import type { IncomingMessage, ServerResponse } from 'node:http';
+import { buildApp } from '../server/src/app.js';
 
 let appPromise: Promise<FastifyInstance> | null = null;
 
 async function getApp() {
   if (!appPromise) {
     appPromise = (async () => {
-      const { buildApp } = await import('../server/src/app.js');
       const app = await buildApp();
       await app.ready();
       return app;

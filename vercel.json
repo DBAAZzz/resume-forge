@@ -11,6 +11,10 @@
     {
       "source": "/deepseek/:path*",
       "destination": "/api/deepseek/:path*"
+    },
+    {
+      "source": "/crypto/:path*",
+      "destination": "/api/crypto/:path*"
     }
   ],
   "functions": {
