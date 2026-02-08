@@ -48,6 +48,7 @@ export const createResumeAnalysisStream = async (
   return api.post('deepseek/analyze-resume', {
     json: params,
     timeout: false,
+    retry: 0,
     headers: {
       Accept: 'text/event-stream',
     },
@@ -60,6 +61,7 @@ export const createDeepInsightsStream = async (
   return api.post('deepseek/analyze/deep-insights', {
     json: params,
     timeout: false,
+    retry: 0,
     headers: {
       Accept: 'text/event-stream',
     },
@@ -72,6 +74,7 @@ export const createFormatHierarchyStream = async (
   return api.post('deepseek/format/hierarchy/stream', {
     json: params,
     timeout: false,
+    retry: 0,
     headers: {
       Accept: 'text/event-stream',
     },

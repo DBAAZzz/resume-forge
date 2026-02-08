@@ -12,10 +12,14 @@ export const useAnalysisToasts = () => {
   const prevWeaknessCount = useRef(aiSuggestions.weakness.length);
   const lastBasicError = useRef<string | null>(null);
   const lastDeepError = useRef<string | null>(null);
+  const lastToastError = useRef<string | null>(null);
 
   useEffect(() => {
     if (basicError && basicError !== lastBasicError.current) {
-      toast.error(basicError);
+      if (basicError !== lastToastError.current) {
+        toast.error(basicError);
+        lastToastError.current = basicError;
+      }
       lastBasicError.current = basicError;
       return;
     }
@@ -27,7 +31,10 @@ export const useAnalysisToasts = () => {
 
   useEffect(() => {
     if (deepError && deepError !== lastDeepError.current) {
-      toast.error(deepError);
+      if (deepError !== lastToastError.current) {
+        toast.error(deepError);
+        lastToastError.current = deepError;
+      }
       lastDeepError.current = deepError;
       return;
     }
@@ -36,6 +43,12 @@ export const useAnalysisToasts = () => {
       lastDeepError.current = null;
     }
   }, [deepError]);
+
+  useEffect(() => {
+    if (!basicError && !deepError) {
+      lastToastError.current = null;
+    }
+  }, [basicError, deepError]);
 
   useEffect(() => {
     const currentCount = aiSuggestions.weakness.length;
