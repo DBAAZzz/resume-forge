@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Brain, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
-import { cn } from '@/shared/utils/classnames';
+import { cn } from '@/utils/classnames';
 
 interface ThinkingProcessProps {
   content?: string;

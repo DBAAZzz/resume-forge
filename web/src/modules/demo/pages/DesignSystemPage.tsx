@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, Input, Typography } from '@/shared/components/base';
+import { Button, Input, Typography } from '@/components/base';
 
 const DesignSystem = () => {
   const [isDark, setIsDark] = useState(false); // Default to light for Luxury theme

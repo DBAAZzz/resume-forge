@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Radar } from 'lucide-react';
 import { useState } from 'react';
 
-import { cn } from '@/shared/utils/classnames';
+import { cn } from '@/utils/classnames';
 
 import { DeepAnalysisTab } from './DeepAnalysisTab';
 import { ResumeScanTab } from './ResumeScanTab';

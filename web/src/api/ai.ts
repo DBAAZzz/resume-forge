@@ -1,4 +1,4 @@
-import { api, http } from '@/shared/utils/fetch';
+import { api, http } from '@/utils/fetch';
 
 import type { DeepseekModel, TagOptimizationResponse } from '@resume/types';
 

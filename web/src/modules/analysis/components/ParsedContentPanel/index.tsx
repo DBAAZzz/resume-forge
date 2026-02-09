@@ -2,16 +2,16 @@ import { LoaderCircle, Sparkles } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
+import { Button } from '@/components/base';
+import { TiptapEditor } from '@/components/editor';
 import { optimizeTagCandidates } from '@/services/ai/tagOptimizer';
-import { Button } from '@/shared/components/base';
-import { TiptapEditor } from '@/shared/components/editor';
-import { cn } from '@/shared/utils/classnames';
 import {
   formatParsedContent as runFormatParsedContent,
   useAnalysisConfigStore,
   useAnalysisDocumentStore,
   useBasicAnalysisStore,
 } from '@/store/analysis';
+import { cn } from '@/utils/classnames';
 
 import { EditorFormatToolbar } from './EditorFormatToolbar';
 

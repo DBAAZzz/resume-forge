@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-import { spinnerVariants } from '@/shared/utils/animations';
+import { spinnerVariants } from '@/utils/animations';
 
 interface AnimatedLoaderProps {
   size?: 'sm' | 'md' | 'lg';

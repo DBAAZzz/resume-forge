@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { AnimatedLoader, AnimatedPage } from '@/shared/components/animated';
+import { AnimatedLoader, AnimatedPage } from '@/components/animated';
 import { useAnalysisDocumentStore } from '@/store/analysis';
 
 import { AnalysisDashboard, AnalysisUpload } from './components';

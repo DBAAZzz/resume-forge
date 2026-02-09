@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-import { fadeInVariants, pageVariants } from '@/shared/utils/animations';
+import { fadeInVariants, pageVariants } from '@/utils/animations';
 
 import type { ReactNode } from 'react';
 

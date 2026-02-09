@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 
+import { AnimatedCard, AnimatedLoader, AnimatedPage } from '@/components/animated';
+import { Button, Typography } from '@/components/base';
 import { useResumes } from '@/queries/useResumeQueries';
-import { AnimatedCard, AnimatedLoader, AnimatedPage } from '@/shared/components/animated';
-import { Button, Typography } from '@/shared/components/base';
-import { containerVariants, fadeInLeftVariants } from '@/shared/utils/animations';
 import { useResumeStore } from '@/store/useResumeStore';
+import { containerVariants, fadeInLeftVariants } from '@/utils/animations';
 
 const MotionTypography = motion(Typography);
 

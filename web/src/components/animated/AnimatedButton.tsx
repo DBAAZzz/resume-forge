@@ -1,6 +1,6 @@
 import { motion, type HTMLMotionProps } from 'framer-motion';
 
-import { buttonHover, buttonTap } from '@/shared/utils/animations';
+import { buttonHover, buttonTap } from '@/utils/animations';
 
 interface AnimatedButtonProps extends HTMLMotionProps<'button'> {
   variant?: 'primary' | 'secondary' | 'outline';

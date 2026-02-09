@@ -1,4 +1,4 @@
-import { http } from '@/shared/utils/fetch';
+import { http } from '@/utils/fetch';
 
 import type { User, UserProfile } from './types';
 

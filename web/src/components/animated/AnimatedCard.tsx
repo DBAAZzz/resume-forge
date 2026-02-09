@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-import { scaleVariants } from '@/shared/utils/animations';
+import { scaleVariants } from '@/utils/animations';
 
 import type { ReactNode } from 'react';
 

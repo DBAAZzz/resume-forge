@@ -1,7 +1,7 @@
 import { EditorContent, useEditor } from '@tiptap/react';
 import { useEffect, useMemo, useRef } from 'react';
 
-import { cn } from '@/shared/utils/classnames';
+import { cn } from '@/utils/classnames';
 
 import { createEditorExtensions } from '../config/extensions';
 import { useTagHighlighter } from '../hooks/useTagHighlighter';
@@ -47,35 +47,38 @@ export const TiptapEditor = ({
     [optimizerContext, onRequestTagCandidates]
   );
 
-  const editor = useEditor({
-    extensions,
-    content,
-    editable,
-    editorProps: {
-      attributes: {
-        class: cn(
-          'tiptap-editor',
-          'prose prose-sm md:prose-base dark:prose-invert max-w-none text-sm focus:outline-none',
-          className
-        ),
+  const editor = useEditor(
+    {
+      extensions,
+      content,
+      editable,
+      editorProps: {
+        attributes: {
+          class: cn(
+            'tiptap-editor',
+            'prose prose-sm md:prose-base dark:prose-invert max-w-none text-sm focus:outline-none',
+            className
+          ),
+        },
+      },
+      onUpdate: ({ editor }) => {
+        if (!onContentChange) return;
+
+        const markdown = (
+          editor.storage as {
+            markdown?: {
+              getMarkdown?: () => string;
+            };
+          }
+        ).markdown?.getMarkdown?.();
+
+        const nextContent = markdown ?? editor.getText({ blockSeparator: '\n' });
+        prevContentRef.current = nextContent;
+        onContentChange(nextContent);
       },
     },
-    onUpdate: ({ editor }) => {
-      if (!onContentChange) return;
-
-      const markdown = (
-        editor.storage as {
-          markdown?: {
-            getMarkdown?: () => string;
-          };
-        }
-      ).markdown?.getMarkdown?.();
-
-      const nextContent = markdown ?? editor.getText({ blockSeparator: '\n' });
-      prevContentRef.current = nextContent;
-      onContentChange(nextContent);
-    },
-  });
+    [optimizerContext, onRequestTagCandidates]
+  );
 
   const recommendations = useMemo(() => {
     if (!suggestions) return [];

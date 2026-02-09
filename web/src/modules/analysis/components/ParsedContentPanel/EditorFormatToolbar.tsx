@@ -1,7 +1,7 @@
 import { useEditorState } from '@tiptap/react';
 import { Bold, Italic } from 'lucide-react';
 
-import { cn } from '@/shared/utils/classnames';
+import { cn } from '@/utils/classnames';
 
 import type { Editor } from '@tiptap/core';
 

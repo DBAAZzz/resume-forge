@@ -2,7 +2,7 @@ import { Transition } from '@headlessui/react';
 import { motion } from 'framer-motion';
 import { Fragment, memo, useState } from 'react';
 
-import { cn } from '@/shared/utils/classnames';
+import { cn } from '@/utils/classnames';
 
 import type { ElementType } from 'react';
 

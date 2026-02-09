@@ -1,4 +1,4 @@
-import { api, uploadFile } from '@/shared/utils/fetch';
+import { api, uploadFile } from '@/utils/fetch';
 
 import type { ParsedFileContent } from '@resume/types';
 

@@ -1,8 +1,8 @@
 import { lazy, Suspense, type ComponentType } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
+import { AnimatedLoader } from '@/components/animated';
 import MainLayout from '@/layouts/MainLayout';
-import { AnimatedLoader } from '@/shared/components/animated';
 
 // Lazy load page components from modules
 const HomePage = lazy(() => import('@/modules/home').then((m) => ({ default: m.HomePage })));

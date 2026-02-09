@@ -8,7 +8,7 @@ import {
   fadeInVariants,
   itemVariants,
   containerVariants,
-} from '@/shared/utils/animations';
+} from '@/utils/animations';
 
 const navItems = [
   { path: '/', label: '首页' },

@@ -1,13 +1,8 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
-import {
-  AnimatedPage,
-  AnimatedButton,
-  AnimatedCard,
-  AnimatedLoader,
-} from '@/shared/components/animated';
-import { containerVariants, itemVariants, pulseVariants } from '@/shared/utils/animations';
+import { AnimatedPage, AnimatedButton, AnimatedCard, AnimatedLoader } from '@/components/animated';
+import { containerVariants, itemVariants, pulseVariants } from '@/utils/animations';
 
 const AnimationDemo = () => {
   const [loading, setLoading] = useState(false);

@@ -4,15 +4,15 @@ import { Upload, Check, Download } from 'lucide-react';
 import { useState, Fragment } from 'react';
 import { toast } from 'sonner';
 
+import { AnimatedButton } from '@/components/animated';
+import { Button, Typography } from '@/components/base';
 import { downloadResumeTemplate } from '@/services/analysis';
-import { AnimatedButton } from '@/shared/components/animated';
-import { Button, Typography } from '@/shared/components/base';
-import { containerVariants, itemVariants } from '@/shared/utils/animations';
 import {
   parseSelectedFile,
   useAnalysisConfigStore,
   useAnalysisDocumentStore,
 } from '@/store/analysis';
+import { containerVariants, itemVariants } from '@/utils/animations';
 
 export const AnalysisUpload = () => {
   const [isDragging, setIsDragging] = useState(false);

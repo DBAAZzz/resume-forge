@@ -2,9 +2,9 @@ import { motion } from 'framer-motion';
 import { ArrowRight, BarChart3, CheckCircle2, FileText, Sparkles, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-import { AnimatedPage } from '@/shared/components/animated';
-import { Button, Typography } from '@/shared/components/base';
-import { containerVariants, itemVariants } from '@/shared/utils/animations';
+import { AnimatedPage } from '@/components/animated';
+import { Button, Typography } from '@/components/base';
+import { containerVariants, itemVariants } from '@/utils/animations';
 
 const features = [
   {
